@@ -2,7 +2,8 @@ from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 import random
-global plate_x,diamond_x_y,speed,hitbox_x,pause,animation_speed
+global plate_x,diamond_x_y,speed,hitbox_x,pause,animation_speed,temp_speed
+temp_speed = 0
 animation_speed = 25
 pause = False
 hitbox_x = {'play':250,'back':0,'cross':500}
@@ -48,9 +49,8 @@ def diamond():
     glEnd()
     diamond_x_y = (x,y)
 def convert_coordinate(x,y):
-    global width, height
-    a = x - (width/2)
-    b = (height/2) - y
+    a = x
+    b = 600 - y
     return a,b
 def play():
     global pause
@@ -97,6 +97,7 @@ def restart():
     plate_x = 200
     diamond_x_y = (300,500)
     speed = 3
+    print('Restart')
     glutPostRedisplay()
 def keyboardListener(key,x,y):
     pass  
@@ -113,7 +114,23 @@ def specialKeyListener(key,x,y):
         if plate_x < 0:
             plate_x+=speed*2
 def mouseListener(button,state,x,y):
-    pass
+    global hitbox_x,speed,temp_speed,pause
+    x1,x2,x3 = hitbox_x['back'],hitbox_x['play'],hitbox_x['cross']
+    x,y = convert_coordinate(x,y)
+    if button == GLUT_LEFT_BUTTON and state == GLUT_DOWN:
+        if x1<=x<=(x1+100) and 500<=y<=600:
+            restart()
+        elif x3<=x<=(x3+100) and 500<=y<=600:
+            glutLeaveMainLoop()
+        elif x2<=x<=(x2+100) and 500<=y<=600:
+            if pause == False:
+                pause = True
+                temp_speed = speed
+                speed = 0
+            else:
+                speed = temp_speed
+                temp_speed = 0
+                pause = False
 def iterate():
     glViewport(0, 0, 600, 600)
     glMatrixMode(GL_PROJECTION)

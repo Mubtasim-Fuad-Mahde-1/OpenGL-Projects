@@ -16,7 +16,7 @@ game_state = "playing"
 play_hitbox = [(-14, 237), (34, 192)]
 cross_hitbox = [(-14+200, 237), (34+200, 192)]
 back_hitbox = [(-14-220, 237), (34-200, 192)]
-#s
+
 
 def convert_coordinate(x, y):
     global W_Width, W_Height
