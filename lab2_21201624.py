@@ -98,7 +98,7 @@ def restart():
     diamond_x_y = (300,500)
     speed = 0
     temp_speed = 3
-    print('Restart')
+    print('Restart!')
     glutPostRedisplay()
 def keyboardListener(key,x,y):
     global temp_speed,speed,pause
