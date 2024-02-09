@@ -7,7 +7,7 @@ global angle
 global day
 angle = 0
 day = 0
-speed = 0.005
+speed = 0.01
 def draw_house():
     #House
     glBegin(GL_QUADS)
@@ -68,20 +68,20 @@ def draw_house():
     glEnd()
     #Roof
     glBegin(GL_TRIANGLES)
-    glColor3f(0.6,0.4,0.2)
+    glColor3f(0.5,0.3,0.1)
     glVertex2f(300, 500)
-    glColor3f(0.6,0.4,0.2)
+    glColor3f(0.706, 0.537, 0.302)
     glVertex2f(500, 600)
-    glColor3f(0.6,0.4,0.2)
+    glColor3f(0.706, 0.537, 0.302)
     glVertex2f(700, 500)
     glEnd()
     #Base
     glBegin(GL_QUADS)
     glColor3f(0.6,0.4,0.2)
     glVertex2f(370, 300)
-    glColor3f(0.6,0.4,0.2)
+    glColor3f(0.706, 0.537, 0.302)
     glVertex2f(630, 300)
-    glColor3f(0.6,0.4,0.2)
+    glColor3f(0.706, 0.537, 0.302)
     glVertex2f(680, 275)
     glColor3f(0.6,0.4,0.2)
     glVertex2f(320, 275)

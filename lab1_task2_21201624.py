@@ -3,7 +3,7 @@ from OpenGL.GLUT import *
 from OpenGL.GLU import *
 import random
 global speed,height,width,size,starlist,animation_speed,pause
-animation_speed = 25
+animation_speed = 15
 speed = 1
 height = 500
 width = 500

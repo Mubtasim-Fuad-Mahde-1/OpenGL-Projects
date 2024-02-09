@@ -25,7 +25,7 @@ def plate():
     glVertex2f(x,y)
     glEnd()
 def diamond():
-    global diamond_x_y,speed,plate_x
+    global diamond_x_y,speed,plate_x,pause
     x,y = diamond_x_y[0],diamond_x_y[1]-speed
     if y < 120 :
         if plate_x<=x<=(plate_x+200):
@@ -92,11 +92,12 @@ def back():
     glVertex2f(75,550)
     glEnd()
 def restart():
-    global plate_x,diamond_x_y,speed,pause
-    pause = False
+    global plate_x,diamond_x_y,speed,pause,temp_speed
+    pause = True
     plate_x = 200
     diamond_x_y = (300,500)
-    speed = 3
+    speed = 0
+    temp_speed = 3
     print('Restart')
     glutPostRedisplay()
 def keyboardListener(key,x,y):
@@ -127,10 +128,12 @@ def mouseListener(button,state,x,y):
                 pause = True
                 temp_speed = speed
                 speed = 0
-            else:
+                glutPostRedisplay()
+            elif pause == True:
+                pause = False
                 speed = temp_speed
                 temp_speed = 0
-                pause = False
+                glutPostRedisplay()
 def iterate():
     glViewport(0, 0, 600, 600)
     glMatrixMode(GL_PROJECTION)
@@ -140,10 +143,11 @@ def iterate():
     glLoadIdentity()
 
 def showScreen():
-    global angle
+    global pause
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glLoadIdentity()
     iterate()
+    print(pause)
     plate()
     diamond()
     back()
