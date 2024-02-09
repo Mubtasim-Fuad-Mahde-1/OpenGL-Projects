@@ -117,13 +117,13 @@ def specialKeyListener(key,x,y):
     if pause == True:
         return
     if key == GLUT_KEY_RIGHT:
-        plate_x+=speed*2
+        plate_x+=speed*2.5
         if plate_x > 400:
-            plate_x-=speed*2
+            plate_x-=speed*2.5
     elif key == GLUT_KEY_LEFT:
-        plate_x-=speed*2
+        plate_x-=speed*2.5
         if plate_x < 0:
-            plate_x+=speed*2
+            plate_x+=speed*2.5
 def mouseListener(button,state,x,y):
     global hitbox_x,speed,temp_speed,pause
     x1,x2,x3 = hitbox_x['back'],hitbox_x['play'],hitbox_x['cross']
