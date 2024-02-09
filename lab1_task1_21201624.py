@@ -110,6 +110,7 @@ def sky():
     glVertex2f(0, 0)
     glEnd()
 def draw_land():
+    #ground
     glBegin(GL_QUADS)
     glColor3f(0.8, 0.6, 0.4)
     glVertex2f(0, 350)
@@ -120,16 +121,17 @@ def draw_land():
     glColor3f(0.8, 0.6, 0.4)
     glVertex2f(0, 0)
     glEnd()
+    #grass
     for i in range(1,21):
         x = i*50
         y = [200,50,75,150,15,175,100,125,160,77,90,140,40,220,35]
         for j in range(6):
             glBegin(GL_TRIANGLES)
-            glColor3f(0.1,0.2,0.1)
+            glColor3f(0.01,0.02,0.01)
             glVertex2f(x, y[i%15])
             glColor3f(0,1,0)
             glVertex2f(x+random.randint(-30,30),y[i%15]+random.randint(25,50) )
-            glColor3f(0.1,0.2,0.1)
+            glColor3f(0.01,0.02,0.01)
             glVertex2f(x+15, y[i%15])
             glEnd()
 
