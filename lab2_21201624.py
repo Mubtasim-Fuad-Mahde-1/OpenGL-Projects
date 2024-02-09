@@ -101,7 +101,17 @@ def restart():
     print('Restart')
     glutPostRedisplay()
 def keyboardListener(key,x,y):
-    pass  
+    global temp_speed,speed,pause
+    if key == b' ':
+        if pause == False:
+            pause = True
+            temp_speed = speed
+            speed = 0
+        elif pause == True:
+            pause = False
+            speed = temp_speed
+            temp_speed = 0
+        glutPostRedisplay()
 def specialKeyListener(key,x,y):
     global pause,plate_x,speed
     if pause == True:
@@ -147,7 +157,6 @@ def showScreen():
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glLoadIdentity()
     iterate()
-    print(pause)
     plate()
     diamond()
     back()
