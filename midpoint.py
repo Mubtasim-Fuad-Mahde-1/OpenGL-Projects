@@ -1,36 +1,100 @@
 from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
-
-global animation_speed,pause,plate_x
+import random
+global animation_speed,pause,plate_x,speed,temp_speed,diamond_x,diamond_y
+temp_speed = 0
+speed = 1
 plate_x = 200
 pause = False
-animation_speed = 25
+animation_speed = 1000
+diamond_x,diamond_y = 300,500
 def plate():
     global plate_x
     x = plate_x
     r,g,b = 1,0,0
-    #line_algo(x,50,x+200,50,r,g,b)
-    #line_algo(x+25,25,x+175,25,r,g,b)
+    line_algo(x,50,x+200,50,r,g,b)
+    line_algo(x+25,25,x+175,25,r,g,b)
     line_algo(x,50,x+25,25,r,g,b)
-    #line_algo(x+175,25,x+200,50,r,g,b)
+    line_algo(x+175,25,x+200,50,r,g,b)
 
 def diamond():
-    pass
+    global diamond_x,diamond_y,speed,plate_x,pause
+    if diamond_y < 110 and plate_x<=diamond_x<=plate_x+200:
+        diamond_y = 500
+        print('Score=',speed)
+        diamond_x = random.randint(25,575)
+    if diamond_y < 110 and (diamond_x>(plate_x+200) or diamond_x<plate_x):
+        restart()
+        return
+    diamond_y-=speed
+    if pause == True:
+        diamond_y+=speed
+    x = diamond_x
+    y = diamond_y
+    r,g,b = 1,0,0
+    line_algo(x,y,x-20,y-30,r,g,b)
+    line_algo(x,y,x+20,y-30,r,g,b)
+    line_algo(x-20,y-30,x,y-60,r,g,b)
+    line_algo(x+20,y-30,x,y-60,r,g,b)
+    glutPostRedisplay()
 
 def back():
-    pass
+    r,g,b = 1,0,0
+    x = 25
+    y = 550
+    line_algo(x,y,x+50,y,r,g,b)
+    line_algo(x,y,x+25,y+25,r,g,b)
+    line_algo(x,y,x+25,y-25,r,g,b)
 
 def pause_play():
-    pass
+    global pause 
+    r,g,b = 1,0,0
+    if pause == True:
+        x = 275
+        y = 575
+        line_algo(x,y,x+50,y-25,r,g,b)
+        line_algo(x,y-50,x+50,y-25,r,g,b)
+        line_algo(x,y,x,y-50,r,g,b)
+    else:
+        x = 275
+        y = 575
+        line_algo(x+10,y,x+10,y-50,r,g,b)
+        line_algo(x+40,y,x+40,y-50,r,g,b)
 
 def cross():
-    pass
+    r,g,b = 1,0,0
+    x = 525
+    y = 575
+    line_algo(x,y,x+50,y-50,r,g,b)
+    line_algo(x,y-50,x+50,y,r,g,b)
 
 def convert_coordinate(x,y):
     return x, 600-y
 
-def from_zone0(x, y, z):
+def zone(x1, y1, x2, y2):
+    dy = y2-y1
+    dx = x2-x1
+    if abs(dx) > abs(dy):
+        if dx > 0 and dy >= 0:
+            return 0
+        elif dx < 0 and dy > 0:
+            return 3
+        elif dx < 0 and dy < 0:
+            return 4
+        else:
+            return 7
+    else:
+        if dx > 0 and dy >= 0:
+            return 1
+        elif dx < 0 and dy > 0:
+            return 2
+        elif dx < 0 and dy < 0:
+            return 5
+        else:
+            return 6
+
+def zone02z(x,y,z):
     if z == 0:
         return x, y
     elif z == 1:
@@ -44,11 +108,11 @@ def from_zone0(x, y, z):
     elif z == 5:
         return -y, -x
     elif z == 6:
-        return -y, x
+        return y, -x
     elif z == 7:
         return x, -y
 
-def to_zone0(x, y, z):
+def z2zone0(x,y,z):
     if z == 0:
         return x, y
     elif z == 1:
@@ -65,67 +129,35 @@ def to_zone0(x, y, z):
         return -y, x
     elif z == 7:
         return x, -y
-
-def determine_zone(x, y):
-    if x >= 0:
-        if y >= 0:
-            if x >= y:
-                return 0
-            else:
-                return 1
-        else:
-            if x >= -y:
-                return 7
-            else:
-                return 6
-    else:
-        if y >= 0:
-            if -x >= y:
-                return 3
-            else:
-                return 2
-        else:
-            if x <= y:
-                return 4
-            else:
-                return 5
-
-def line_algo(x1,y1,x2,y2,r=1,g=1,b=1):
-    z1 = determine_zone(x1,y1)
-    x1,y1 = to_zone0(x1,y1,z1)
-    z2 = determine_zone(x2,y2)
-    x2,y2 = to_zone0(x2,y2,z2)
-    dx = abs(x2 - x1)
-    dy = abs(y2 - y1)
-    slope = dy > dx
     
-    if slope:
-        x1, y1 = y1, x1
-        x2, y2 = y2, x2
-    if x1 > x2:
-        x1,x2 = x2,x1
-        y1,y2 = y2,y1
-          
-    dx = x2 - x1  
-    dy = -abs(y2 - y1)
-    d = dy - (dx/2)  
-    x = x1 
-    y = y1  
-    x1,y1 = from_zone0(x1,y1,z1)
+def line_algo(x1,y1,x2,y2,r=1,g=1,b=1):
+    z = zone(x1,y1,x2,y2)
+    x1,y1 = z2zone0(x1,y1,z)
+    x2,y2 = z2zone0(x2,y2,z)
+    dy = y2 - y1 
+    dx = x2 - x1 
+    d = 2 * dy - dx 
     glBegin(GL_POINTS)
     glColor3f(r,g,b)
     glVertex2f(x1,y1)
-    while (x < x2): 
-        x=x+1
-        if(d < 0): 
-            d = d + dy    
-        else: 
-            d = d + (dy - dx)  
-            y=y+1
-        z = determine_zone(x,y)
-        x,y = from_zone0(x,y,z)
-        glVertex2f(x,y)
+    while True:
+        if x1 == x2 and y1 == y2:
+            break
+        if d > 0:
+            d = d + 2 * dy - 2 * dx
+            x1 += 1
+            y1 += 1
+            x1,y1 = zone02z(x1,y1,z)
+            glVertex2f(x1,y1)
+            x1,y1 = z2zone0(x1,y1,z)
+        else:
+            d = d + 2 * dy
+            x1 += 1
+            x1, y1 = zone02z(x1, y1,z)
+            glVertex2f(x1, y1)
+            x1, y1 = z2zone0(x1, y1,z)
     glEnd()
+
 def keyboardListener(key,x,y):
     global pause
     if key == b' ':
@@ -133,26 +165,56 @@ def keyboardListener(key,x,y):
             pause == True
         else:
             pause == False
+
 def restart():
-    pass
+    global plate_x,diamond_x,diamond_y,speed,pause,temp_speed
+    pause = True
+    plate_x = 200
+    diamond_x,diamond_y = 300,500
+    speed = 0
+    print('Restart!')
+    glutPostRedisplay()
 
-def specialKeyListener():
-    pass 
-
+def keyboardListener(key,x,y):
+    global temp_speed,speed,pause
+    if key == b' ':
+        if pause == False:
+            pause = True
+            speed = 0
+        elif pause == True:
+            pause = False
+            speed = 1
+        glutPostRedisplay()
+def specialKeyListener(key,x,y):
+    global pause,plate_x,speed
+    if pause == True:
+        return
+    if key == GLUT_KEY_RIGHT:
+        plate_x+=speed*2.5
+        if plate_x > 400:
+            plate_x-=speed*2.5
+    elif key == GLUT_KEY_LEFT:
+        plate_x-=speed*2.5
+        if plate_x < 0:
+            plate_x+=speed*2.5
 def mouseListener(button,state,x,y):
-    global pause
+    global speed,temp_speed,pause
+    x1,x2,x3 = 0,250,500
     x,y = convert_coordinate(x,y)
     if button == GLUT_LEFT_BUTTON and state == GLUT_DOWN:
-        if 25<=x<=75 and 525<=y<=575:
+        if x1<=x<=(x1+100) and 500<=y<=600:
             restart()
-            return
-        elif 275<=x<=325 and 525<=y<=575:
-            if pause == False:
-                pause == True
-            else:
-                pause == False
-        elif 525<=x<=575 and 525<=y<=575:
+        elif x3<=x<=(x3+100) and 500<=y<=600:
             glutLeaveMainLoop()
+        elif x2<=x<=(x2+100) and 500<=y<=600:
+            if pause == False:
+                pause = True
+                speed = 0
+                glutPostRedisplay()
+            else:
+                pause = False
+                speed = 1
+                glutPostRedisplay()
 
 def animate(value):
     global animation_speed
@@ -168,11 +230,16 @@ def iterate():
     glLoadIdentity()
     
 def showScreen():
-    global pause
+    global speed
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glLoadIdentity()
     iterate()
     plate()
+    diamond()
+    back()
+    pause_play()
+    cross()
+    print(speed)
     glutSwapBuffers()
 
 glutInit()
