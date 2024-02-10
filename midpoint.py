@@ -2,8 +2,8 @@ from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 import random
-global animation_speed,pause,plate_x,speed,temp_speed,diamond_x,diamond_y
-temp_speed = 0
+global animation_speed,pause,plate_x,speed,diamond_x,diamond_y,plate_speed
+plate_speed = 3
 speed = 1
 plate_x = 200
 pause = False
@@ -12,17 +12,19 @@ diamond_x,diamond_y = 300,500
 def plate():
     global plate_x
     x = plate_x
-    r,g,b = 1,0,0
+    r,g,b = 0,1,1
     line_algo(x,50,x+200,50,r,g,b)
     line_algo(x+25,25,x+175,25,r,g,b)
     line_algo(x,50,x+25,25,r,g,b)
     line_algo(x+175,25,x+200,50,r,g,b)
 
 def diamond():
-    global diamond_x,diamond_y,speed,plate_x,pause
+    global diamond_x,diamond_y,speed,plate_x,pause,plate_speed
     if diamond_y < 110 and plate_x<=diamond_x<=plate_x+200:
         diamond_y = 500
-        print('Score=',speed)
+        print('Score=',plate_speed-2)
+        plate_speed+=1
+        speed+=plate_speed*0.01
         diamond_x = random.randint(25,575)
     if diamond_y < 110 and (diamond_x>(plate_x+200) or diamond_x<plate_x):
         restart()
@@ -32,7 +34,7 @@ def diamond():
         diamond_y+=speed
     x = diamond_x
     y = diamond_y
-    r,g,b = 1,0,0
+    r,g,b = 1,1,0
     line_algo(x,y,x-20,y-30,r,g,b)
     line_algo(x,y,x+20,y-30,r,g,b)
     line_algo(x-20,y-30,x,y-60,r,g,b)
@@ -40,7 +42,7 @@ def diamond():
     glutPostRedisplay()
 
 def back():
-    r,g,b = 1,0,0
+    r,g,b = 0,1,0
     x = 25
     y = 550
     line_algo(x,y,x+50,y,r,g,b)
@@ -49,7 +51,7 @@ def back():
 
 def pause_play():
     global pause 
-    r,g,b = 1,0,0
+    r,g,b = 1,0.2,1
     if pause == True:
         x = 275
         y = 575
@@ -167,11 +169,12 @@ def keyboardListener(key,x,y):
             pause == False
 
 def restart():
-    global plate_x,diamond_x,diamond_y,speed,pause,temp_speed
+    global plate_x,diamond_x,diamond_y,speed,pause,temp_speed,plate_speed
     pause = True
     plate_x = 200
     diamond_x,diamond_y = 300,500
     speed = 0
+    plate_speed = 3
     print('Restart!')
     glutPostRedisplay()
 
@@ -185,18 +188,20 @@ def keyboardListener(key,x,y):
             pause = False
             speed = 1
         glutPostRedisplay()
+
 def specialKeyListener(key,x,y):
-    global pause,plate_x,speed
+    global pause,plate_x,speed,plate_speed
     if pause == True:
         return
     if key == GLUT_KEY_RIGHT:
-        plate_x+=speed*2.5
+        plate_x+=plate_speed
         if plate_x > 400:
-            plate_x-=speed*2.5
+            plate_x-=plate_speed
     elif key == GLUT_KEY_LEFT:
-        plate_x-=speed*2.5
+        plate_x-=plate_speed
         if plate_x < 0:
-            plate_x+=speed*2.5
+            plate_x+=plate_speed
+
 def mouseListener(button,state,x,y):
     global speed,temp_speed,pause
     x1,x2,x3 = 0,250,500
@@ -230,7 +235,6 @@ def iterate():
     glLoadIdentity()
     
 def showScreen():
-    global speed
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glLoadIdentity()
     iterate()
@@ -239,7 +243,6 @@ def showScreen():
     back()
     pause_play()
     cross()
-    print(speed)
     glutSwapBuffers()
 
 glutInit()
