@@ -250,7 +250,7 @@ glutInitWindowSize(600, 600) #window size
 glutInitWindowPosition(0, 0)
 wind = glutCreateWindow(b"OpenGL Coding Practice") #window name
 glutDisplayFunc(showScreen)
-#glutTimerFunc(animation_speed,animate,0)
+glutTimerFunc(animation_speed,animate,0)
 glutKeyboardFunc(keyboardListener)
 glutSpecialFunc(specialKeyListener)
 glutMouseFunc(mouseListener)
