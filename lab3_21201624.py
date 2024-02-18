@@ -9,18 +9,21 @@ pause = False
 
 def draw_circle():
     global origin,pause
-    for i in origin:
-        glColor3f(random.random(),random.random(),random.random())
+    for i in origin: #iterates through all the origins for circle
         x0,y0,r = i[0], i[1], i[2]
         x_min = x0 - r
         x_max = x0 + r
         y_min = y0 - r
         y_max = y0 + r
         if x_min > 0 and x_max < 600:
-            if y_min > 0 and y_max < 600:
+            if y_min > 0 and y_max < 600: # check if it touches the window screen
                 circle_algo(x0,y0,r)
+            else:
+                origin.remove(i)
+        else:
+            origin.remove(i)
             
-def circle_algo(x0,y0,r):
+def circle_algo(x0,y0,r): #midpoint circle drawing algorithm
     d = 1 - r
     x = 0
     y = r
@@ -34,10 +37,10 @@ def circle_algo(x0,y0,r):
             d = d + 2*x + 3
             x += 1
         
-def convert_coordinate(x,y):
+def convert_coordinate(x,y): #convert mouse co-ords to screen co-ords
     return x, 600-y
 
-def circle_zones(x, y, x0, y0): #x,y are points generated and x0,y0 is the origin of circle
+def circle_zones(x, y, x0, y0): #x,y are points generated for each zone and x0,y0 is the origin of circle
     glVertex2f(x + x0, y + y0)
     glVertex2f(y + x0, x + y0)
     glVertex2f(y + x0, -x + y0)
@@ -47,7 +50,7 @@ def circle_zones(x, y, x0, y0): #x,y are points generated and x0,y0 is the origi
     glVertex2f(-y + x0, x + y0)
     glVertex2f(-x + x0, y + y0)
 
-def keyboardListener(key,x,y):
+def keyboardListener(key,x,y): # implement pause button
     global pause
     if key == b' ':
         if pause == True:
@@ -56,7 +59,7 @@ def keyboardListener(key,x,y):
             pause = True
     glutPostRedisplay()
 
-def specialKeyListener(key,x,y):
+def specialKeyListener(key,x,y): # control the animation speed that manipulates radius change speed
     global speed
     if key == GLUT_KEY_DOWN:
         speed += 1
@@ -67,11 +70,11 @@ def specialKeyListener(key,x,y):
     print(speed)
     glutPostRedisplay()
     
-def mouseListener(button,state,x,y):
+def mouseListener(button,state,x,y): # append new circle origins in the list
     global origin
     if button == GLUT_RIGHT_BUTTON and state == GLUT_DOWN:
         x,y = convert_coordinate(x,y)
-        origin.append((x,y,3))
+        origin.append((x,y,3)) # set initial radius to be 3
 
 def animate(value):
     global speed,pause,origin
@@ -79,7 +82,7 @@ def animate(value):
     if pause == True:
         glutTimerFunc(speed,animate,0)
     else:
-        for i in range(len(origin)):
+        for i in range(len(origin)): #increament radius of all cirle by 1 
             x,y,r = origin[i][0],origin[i][1],origin[i][2] + 1
             origin[i] = (x,y,r)
         glutTimerFunc(speed,animate,0)
