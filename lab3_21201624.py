@@ -27,13 +27,13 @@ def circle_algo(x0,y0,r): #midpoint circle drawing algorithm
     d = 1 - r
     x = 0
     y = r
-    while x < y:
-        circle_zones(x, y, x0, y0)
-        if d >= 0:
+    while x < y: 
+        circle_zones(x, y, x0, y0) # x0, y0 is the original center of the circle
+        if d >= 0: # for South East Pixel
             d = d + 2*x - 2*y + 5
             x += 1
             y -= 1
-        else:
+        else: # for East Pixel
             d = d + 2*x + 3
             x += 1
         
@@ -98,6 +98,8 @@ def iterate():
 def showScreen():
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     iterate()
+    glEnable(GL_POINT_SMOOTH)  # Enable point antialiasing
+    glPointSize(1)
     glBegin(GL_POINTS)
     glColor3f(random.random(),random.random(),random.random())
     draw_circle()
