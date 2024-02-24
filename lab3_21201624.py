@@ -27,7 +27,7 @@ def circle_algo(x0,y0,r): #midpoint circle drawing algorithm
     d = 1 - r
     x = 0
     y = r
-    while x < y: 
+    while x <= y: 
         circle_zones(x, y, x0, y0) # x0, y0 is the original center of the circle
         if d >= 0: # for South East Pixel
             d = d + 2*x - 2*y + 5
