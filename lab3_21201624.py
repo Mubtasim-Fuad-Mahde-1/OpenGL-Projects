@@ -183,7 +183,7 @@ def draw_circle():
     if pause == True:
         j = 0
     else:
-        j = 1
+        j = 2
     for i in range(len(circles)):
         x = circles[i][0]
         y = circles[i][1]
@@ -195,7 +195,7 @@ def draw_bullet():
     if pause == True:
         j = 0
     else:
-        j = 5
+        j = 10
     for i in range(len(bullet)):
         x = bullet[i][0]
         y = bullet[i][1]
