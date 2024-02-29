@@ -171,14 +171,14 @@ def circle_algo(x0,y0,r): #midpoint circle drawing algorithm
             d = d + 2*x + 3
             x += 1
 
-def draw_shooter():
+def draw_shooter(): #player or shooter
     global pasue, shooter
     x = shooter
     y = 25
     r = 15
     circle_algo(x,y,r)
 
-def draw_circle():
+def draw_circle(): #generate all 5 circles from circles array
     global pause, circles
     if pause == True:
         j = 0
@@ -190,7 +190,7 @@ def draw_circle():
         circles[i][1]-=j
         circle_algo(x,y,20)
     
-def draw_bullet():
+def draw_bullet(): #draw all the bullet in the array
     global pause, bullet
     if pause == True:
         j = 0
@@ -202,7 +202,7 @@ def draw_bullet():
         bullet[i][1]+=j
         circle_algo(x,y,10)  
 
-def shot_checker():
+def shot_checker(): # check if the shot hits
     global circles, bullet, life, score
     for i in bullet:
         x = i[0]
@@ -213,7 +213,7 @@ def shot_checker():
             X_max = j[0]+30
             Y_min = j[1]-30
             Y_max = j[1]+30
-            if X_min <= x <= X_max:
+            if X_min <= x <= X_max: # if it hits destory the bubble and generate a new one
                 if Y_min <= y <= Y_max:
                     bullet.remove(i)
                     circles.remove(j)
@@ -221,7 +221,7 @@ def shot_checker():
                     score+=1
                     print('Score =', score)
                     return
-            elif j[1] < 70:
+            elif j[1] < 70: #else remove a life from life count 
                 life-=1
                 print('Life Left =',life)
                 circles.remove(j)
@@ -233,18 +233,18 @@ def shot_checker():
             count+=1
             #my_list.remove(value_to_remove)
 
-def draw_text(text):
+def draw_text(text): # draw text on screen showing the score and life left
     glColor3f(1,1,1)
     glRasterPos2f(10, 580)
     for char in text:
         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ord(char))
 
-def generate_circle():
+def generate_circle(): #generate random bubbles to shoot
     global cicles
     for i in range(5):
         circles.append([random_origin_x(i),random_origin_y()])
 
-def restart():
+def restart(): #initialize everything
     global pause, circles, bullet, shooter, life, score
     shooter = 300
     pause = True
@@ -254,14 +254,14 @@ def restart():
     life = 3
     score = 0
 
-def keyboardListener(key,x,y):
+def keyboardListener(key,x,y): #shoot bullets using space bar
     global pause, bullet, shooter
     if pause == True:
         return
     if key == b' ':
         bullet.append([shooter,50])
 
-def specialKeyListener(key,x,y):
+def specialKeyListener(key,x,y): #control the shooter
     global pause, shooter
     if pause == True:
         return
@@ -292,7 +292,7 @@ def mouseListener(button,state,x,y): # use mouse to press 3 positions of the scr
                 pause = False
                 glutPostRedisplay()
 
-def animate(value):
+def animate(value): # for screen animation
     glutPostRedisplay()
     glutTimerFunc(50,animate,0)   
 
