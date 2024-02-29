@@ -225,6 +225,7 @@ def shot_checker():
                 life-=1
                 print('Life Left =',life)
                 circles.remove(j)
+                circles.insert(count,[random_origin_x(count),random_origin_y()])
                 if life == 0:
                     print('Game Over!')
                     restart()
@@ -296,13 +297,14 @@ def animate(value):
     glutTimerFunc(50,animate,0)   
 
 def showScreen(): # display everything
-    global circles
+    global circles, pause
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glEnable(GL_POINT_SMOOTH)  # Enable point antialiasing
     glPointSize(1)
     iterate()
+    if pause == False:
+        draw_circle()
     draw_shooter()
-    draw_circle()
     draw_bullet()
     back()
     pause_play()
