@@ -221,7 +221,7 @@ def shot_checker():
                     score+=1
                     print('Score =', score)
                     return
-            elif j[1] < 50:
+            elif j[1] < 70:
                 life-=1
                 print('Life Left =',life)
                 circles.remove(j)
