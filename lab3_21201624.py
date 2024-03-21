@@ -165,7 +165,6 @@ def circle_algo(x0,y0,r): #midpoint circle drawing algorithm
     y = r
     while x <= y: 
         circle_zones(x, y, x0, y0) # x0, y0 is the original center of the circle
-        print(x,y)
         if d >= 0: # for South East Pixel
             d = d + 2*x - 2*y + 5
             x += 1
@@ -297,17 +296,23 @@ def mouseListener(button,state,x,y): # use mouse to press 3 positions of the scr
 
 def animate(value): # for screen animation
     glutPostRedisplay()
-    glutTimerFunc(10000000000000000,animate,0)   
+    glutTimerFunc(50,animate,0)   
 
-def test_circle():
-    circle_algo(250,250,17)
 def showScreen(): # display everything
     global circles, pause
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glEnable(GL_POINT_SMOOTH)  # Enable point antialiasing
     glPointSize(1)
     iterate()
-    test_circle()
+    if pause == False:
+        draw_circle()
+    draw_shooter()
+    draw_bullet()
+    back()
+    pause_play()
+    cross()
+    shot_checker()
+    draw_text(f'''Score = {str(score)} Life = {str(life)}''')
     glutSwapBuffers()
 
 glutInit()
