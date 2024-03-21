@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-
-=======
-#Hello
-#my name is mahde
-#hi
->>>>>>> cc5d63fcdae99eb0471f8f45d0badeeb36daf807
-
 #CSE423 Project
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
 from OpenGL.GL import *
@@ -13,12 +5,15 @@ from OpenGL.GLUT import *
 from OpenGL.GLU import *
 import random
 
-
-
-
-#Display Text on Screen
+#Global Variables
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
-def draw_text(text, coordinate, color):
+global shooter_x
+shooter_x = 500
+
+
+#Display Objects on screen
+#----------------------------------------------------------------------------##----------------------------------------------------------------------------#
+def text(text, coordinate, color):
     r = color[0]
     g = color[1]
     b = color[2]
@@ -27,8 +22,36 @@ def draw_text(text, coordinate, color):
     for char in text:
         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ord(char))
 
+def cross():
+    pass
 
+def top_bar():
+    x = 0
+    y = 1000
+    glPointSize(5)
+    color = (1,1,0)
+    draw_line(x+10,y-10,x+990,y-10,color)
+    draw_line(x+10,y-60,x+990,y-60,color)
+    draw_line(x+10,y-10,x+10,y-60,color)
+    draw_line(x+990,y-10,x+990,y-60,color)
 
+def bottom_bar():
+    pass
+
+def shooter():
+    pass
+
+def health():
+    pass
+
+def pause_resume():
+    pass
+
+def restart():
+    pass
+
+def pause_title():
+    pass
 
 #Mid Point Line Drawing Algorithm
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
@@ -161,7 +184,19 @@ def draw_circle(x0, y0, r, color): #midpoint circle drawing algorithm
             x += 1
 
 
+#Complex functions (dont touch these please!)
+#----------------------------------------------------------------------------##----------------------------------------------------------------------------#
+class player_bullet:
+    def __init__(self):
+        pass
 
+class nonplayer_bullet:
+    def __init__(self):
+        pass
+
+def create_bullet(bin = 0):
+    pass
+    
 
 
 #User input and actions
@@ -186,16 +221,6 @@ def mouseListener(button, state, x, y):
 
 #Screen Properties and Object display
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
-
-def showScreen():
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-    glPointSize(1)
-    color = (1,1,1)
-    iterate()
-    #Objects
-    
-    glutSwapBuffers()
-
 def iterate():
     glViewport(0, 0, 1000, 1000)
     glMatrixMode(GL_PROJECTION)
@@ -203,6 +228,16 @@ def iterate():
     glOrtho(0.0, 1000, 0.0, 1000, 0.0, 1.0)
     glMatrixMode (GL_MODELVIEW)
     glLoadIdentity()
+
+def showScreen():
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    glPointSize(2)
+    color = (1,1,1)
+    iterate()
+    top_bar()
+    #Objects
+    
+    glutSwapBuffers()
 
 glutInit()
 glutInitDisplayMode(GLUT_RGBA)
