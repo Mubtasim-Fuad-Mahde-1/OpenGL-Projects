@@ -7,8 +7,12 @@ import random
 
 #Global Variables
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
-global shooter_x
+global shooter_x,level
 shooter_x = 500
+level = 1
+bots = []
+shooter_bullets = []
+
 
 
 #Display Objects on screen
@@ -29,14 +33,21 @@ def top_bar():
     x = 0
     y = 1000
     glPointSize(5)
-    color = (1,1,0)
+    color = (1,1,1)
     draw_line(x+10,y-10,x+990,y-10,color)
     draw_line(x+10,y-60,x+990,y-60,color)
     draw_line(x+10,y-10,x+10,y-60,color)
     draw_line(x+990,y-10,x+990,y-60,color)
 
 def bottom_bar():
-    pass
+    x = 0
+    y = 70
+    glPointSize(5)
+    color = (1,1,1)
+    draw_line(x+10,y-10,x+990,y-10,color)
+    draw_line(x+10,y-60,x+990,y-60,color)
+    draw_line(x+10,y-10,x+10,y-60,color)
+    draw_line(x+990,y-10,x+990,y-60,color)
 
 def shooter():
     pass
@@ -53,14 +64,68 @@ def restart():
 def pause_title():
     pass
 
+def shooter():
+    global shooter_x
+    x = shooter_x
+    y = 130
+    color = (1,1,1)
+    glPointSize(3)
+    draw_line(x,y,x-25,y-50,color)
+    draw_line(x,y,x+25,y-50,color)
+    draw_line(x-25,y-50,x+25,y-50,color)
+    draw_line(x-13,y-25,x-50,y-60,color)
+    draw_line(x+13,y-25,x+50,y-60,color)
+    draw_line(x-50,y-60,x-25,y-50,color)
+    draw_line(x+50,y-60,x+25,y-50,color)
+    glPointSize(2)
+    draw_line(x,y+10,x-10,y-5,color)
+    draw_line(x,y+10,x+10,y-5,color)
+    draw_line(x-10,y-5,x,y,color)
+    draw_line(x+10,y-5,x,y,color)
+    glPointSize(4)
+    draw_line(x-30,y-40,x-30,y-30,color)
+    draw_line(x+30,y-40,x+30,y-30,color)
+
+def shooter_bullet():
+    global shooter_bullets
+    for i in shooter_bullets:
+        x = i[0]
+        y = i[1]
+        color = (1,1,1)
+        glPointSize(1)
+        draw_line(x,y,x-6,y-20,color)
+        draw_line(x,y,x+6,y-20,color)
+        draw_line(x-6,y-20,x,y-12,color)
+        draw_line(x+6,y-20,x,y-12,color)
+    for i in shooter_bullets:
+        x = i[0]-30
+        y = i[1]-40
+        color = (1,1,1)
+        glPointSize(1)
+        draw_line(x,y,x-6,y-20,color)
+        draw_line(x,y,x+6,y-20,color)
+        draw_line(x-6,y-20,x,y-12,color)
+        draw_line(x+6,y-20,x,y-12,color)
+    for i in shooter_bullets:
+        x = i[0]+30
+        y = i[1]-40
+        color = (1,1,1)
+        glPointSize(1)
+        draw_line(x,y,x-6,y-20,color)
+        draw_line(x,y,x+6,y-20,color)
+        draw_line(x-6,y-20,x,y-12,color)
+        draw_line(x+6,y-20,x,y-12,color)
+        
+    
+    
 #Mid Point Line Drawing Algorithm
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
 
 def zone(x1, y1, x2, y2): 
     dy = y2-y1
     dx = x2-x1
-    if abs(dx) > abs(dy):
-        if dx > 0 and dy >= 0:
+    if abs(dx) >= abs(dy):
+        if dx >= 0 and dy >= 0:
             return 0
         elif dx < 0 and dy > 0:
             return 3
@@ -69,7 +134,7 @@ def zone(x1, y1, x2, y2):
         else:
             return 7
     else:
-        if dx > 0 and dy >= 0:
+        if dx >= 0 and dy >= 0:
             return 1
         elif dx < 0 and dy > 0:
             return 2
@@ -126,7 +191,6 @@ def draw_line(x1, y1, x2, y2, color):
     b = color[2]
     glBegin(GL_POINTS)
     glColor3f(r,g,b)
-    glVertex2f(x1,y1)
     while True:
         if x1 == x2 and y1 == y2:
             break
@@ -186,16 +250,11 @@ def draw_circle(x0, y0, r, color): #midpoint circle drawing algorithm
 
 #Complex functions (dont touch these please!)
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
-class player_bullet:
-    def __init__(self):
-        pass
+
 
 class nonplayer_bullet:
     def __init__(self):
         pass
-
-def create_bullet(bin = 0):
-    pass
     
 
 
@@ -206,16 +265,45 @@ def convert_coordinate(x, y):
     return x, 600-y
 
 def keyboardListener(key, x, y):
-    pass
+    global shooter_x, shooter_bullets
+    if key == b' ':
+        shooter_bullets.append((shooter_x,160))
+    glutPostRedisplay()
 
 def specialKeyListener(key, x, y):
-    pass
+    global shooter_x
+    if key == GLUT_KEY_RIGHT:
+        shooter_x+=10
+        if shooter_x > 1000:
+            shooter_x-=10
+    elif key == GLUT_KEY_LEFT:
+        shooter_x-=10
+        if shooter_x < 0:
+            shooter_x+=10
 
 def mouseListener(button, state, x, y):
     pass
 
 
 
+#Animation Functions
+#----------------------------------------------------------------------------##----------------------------------------------------------------------------#
+
+def animate(value):
+    glutPostRedisplay()
+    glutTimerFunc(1,animate,0)
+
+def animate_shooter_bullets(value):
+    global shooter_bullets
+    for i in range(0,len(shooter_bullets)):
+        if shooter_bullets[i][1]+5 > 940:
+            shooter_bullets.pop(i)
+            glutPostRedisplay()
+            break
+        else:
+            shooter_bullets[i] = (shooter_bullets[i][0],shooter_bullets[i][1]+5)
+            glutPostRedisplay()
+    glutTimerFunc(1,animate_shooter_bullets,0)
 
 
 
@@ -235,8 +323,9 @@ def showScreen():
     color = (1,1,1)
     iterate()
     top_bar()
-    #Objects
-    
+    bottom_bar()
+    shooter()
+    shooter_bullet()
     glutSwapBuffers()
 
 glutInit()
@@ -248,4 +337,6 @@ glutDisplayFunc(showScreen)
 glutKeyboardFunc(keyboardListener)
 glutSpecialFunc(specialKeyListener)
 glutMouseFunc(mouseListener)
+glutTimerFunc(1,animate_shooter_bullets,0)
+glutTimerFunc(1,animate,0)
 glutMainLoop()
