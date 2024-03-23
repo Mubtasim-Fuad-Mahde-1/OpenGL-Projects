@@ -7,11 +7,12 @@ import random
 
 #Global Variables
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
-global shooter_x,level
+global shooter_x,level,shooter_bullets,bots,bot_bullets
 shooter_x = 500
 level = 1
 bots = []
 shooter_bullets = []
+bot_bullets = []
 
 
 
@@ -116,8 +117,59 @@ def shooter_bullet():
         draw_line(x-6,y-20,x,y-12,color)
         draw_line(x+6,y-20,x,y-12,color)
         
+def power_up():
+    pass
     
-    
+def bot_range(i):
+    i = 200*(i+1)
+    x1 = i-170
+    x2 = i-30
+    y1 = 800
+    y2 = 900
+    x = random.randint(x1,x2)
+    y = random.randint(y1,y2)
+    return (x,y)
+
+def bot_army():
+    global bots
+    for i in bots:
+        x = i[0]
+        y = i[1]
+        r = 30
+        color = (1,1,1)
+        glPointSize(4)
+        draw_circle(x,y,r,color)
+        draw_circle(x,y,10,color)
+        draw_line(x-7,y+7,x,y+30,color)
+        draw_line(x-7,y+7,x-30,y,color)
+        draw_line(x+7,y+7,x,y+30,color)
+        draw_line(x+7,y+7,x+30,y,color)
+        draw_line(x-7,y-7,x-30,y,color)
+        draw_line(x-7,y-7,x,y-30,color)
+        draw_line(x+7,y-7,x+30,y,color)
+        draw_line(x+7,y-7,x,y-30,color)
+        
+def bullet_impact():
+    global bots, shooter_bullets
+    for i in shooter_bullets:
+        x = i[0]
+        y = i[1]
+        count = 0
+        for j in bots:
+            X_min = j[0]-60
+            X_max = j[0]+60
+            Y_min = j[1]-60
+            Y_max = j[1]+60
+            if X_min <= x <= X_max: # if it hits destory the bubble and generate a new one
+                if Y_min <= y <= Y_max:
+                    shooter_bullets.remove(i)
+                    idx = bots.index(j)
+                    bots.remove(j)
+                    bots.insert(idx,bot_range(idx))
+                    return
+                    
+            
+
 #Mid Point Line Drawing Algorithm
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
 
@@ -238,7 +290,6 @@ def draw_circle(x0, y0, r, color): #midpoint circle drawing algorithm
     y = r
     while x <= y: 
         circle_zones(x, y, x0, y0, color) # x0, y0 is the original center of the circle
-        print(x,y)
         if d >= 0: # for South East Pixel
             d = d + 2*x - 2*y + 5
             x += 1
@@ -305,7 +356,15 @@ def animate_shooter_bullets(value):
             glutPostRedisplay()
     glutTimerFunc(1,animate_shooter_bullets,0)
 
-
+def animate_bot_movement(value):
+    global bots
+    for i in range(len(bots)):
+        if bots[i][1]-2 < 90:
+            bots.pop(i)
+            bots.insert(i,bot_range(i))
+        bots[i] = (bots[i][0],bots[i][1]-2)
+        glutPostRedisplay()
+    glutTimerFunc(25,animate_bot_movement,0)
 
 #Screen Properties and Object display
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
@@ -317,6 +376,9 @@ def iterate():
     glMatrixMode (GL_MODELVIEW)
     glLoadIdentity()
 
+for i in range(5):
+    bots.append(bot_range(i))
+
 def showScreen():
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glPointSize(2)
@@ -326,6 +388,8 @@ def showScreen():
     bottom_bar()
     shooter()
     shooter_bullet()
+    bot_army()
+    bullet_impact()
     glutSwapBuffers()
 
 glutInit()
@@ -339,4 +403,5 @@ glutSpecialFunc(specialKeyListener)
 glutMouseFunc(mouseListener)
 glutTimerFunc(1,animate_shooter_bullets,0)
 glutTimerFunc(1,animate,0)
+glutTimerFunc(25,animate_bot_movement,0)
 glutMainLoop()
