@@ -7,7 +7,8 @@ import random
 
 #Global Variables
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
-global shooter_x,level,shooter_bullets,bots,bot_bullets
+global shooter_x,level,shooter_bullets,bots,bot_bullets,life
+life = 3
 shooter_x = 500
 level = 1
 bots = []
@@ -176,6 +177,32 @@ def bot_bullets_():
         x,y = i.cord()
         draw_circle(x,y,3,color)
 
+def shooter_impact():
+    global bots,bot_bullets,shooter_x,life
+    X = shooter_x
+    Y = 130
+    for i in bots:
+        x,y = i[0],i[1]
+        if x-30 < X < x+30:
+            if y-30 < Y < y+30:
+                life -= 1
+                idx = bots.index(i)
+                bots.remove(i)
+                bots.insert(idx,bot_range(idx))
+                glutPostRedisplay()
+                break
+    for j in bot_bullets:
+        x,y = j.cord()
+        if x-20 < X < x+20:
+            if y-20 < Y < y+20:
+                life -= 1
+                bot_bullets.remove(j)
+                del j
+                glutPostRedisplay()
+                break
+    return
+
+
 #Mid Point Line Drawing Algorithm
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
 
@@ -324,6 +351,17 @@ class nonplayer_bullet:
     def cord(self):
         return self.x, self.y
 
+def restart():
+    global shooter_x,level,shooter_bullets,bots,bot_bullets,life
+    life = 3
+    shooter_x = 500
+    level = 1
+    bots = []
+    shooter_bullets = []
+    bot_bullets = []
+    for i in range(5):
+        bots.append(bot_range(i))
+    glutPostRedisplay()
 
 #User input and actions
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
@@ -373,11 +411,13 @@ def animate_shooter_bullets(value):
     glutTimerFunc(1,animate_shooter_bullets,0)
 
 def animate_bot_movement(value):
-    global bots
+    global bots,life
     for i in range(len(bots)):
         if bots[i][1]-2 < 90:
+            life -= 1
             bots.pop(i)
             bots.insert(i,bot_range(i))
+            glutPostRedisplay()
         bots[i] = (bots[i][0],bots[i][1]-2)
         glutPostRedisplay()
     glutTimerFunc(100,animate_bot_movement,0)
@@ -409,6 +449,13 @@ def bot_bullet_animation(value):
     glutPostRedisplay()
     glutTimerFunc(1,bot_bullet_animation,0)
 
+def life_checker(value):
+    global life
+    if life == 0:
+        restart()
+        return
+    glutTimerFunc(1, life_checker, 0)
+
 #Screen Properties and Object display
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
 def iterate():
@@ -423,6 +470,7 @@ for i in range(5):
     bots.append(bot_range(i))
 
 def showScreen():
+    global life
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glPointSize(2)
     color = (1,1,1)
@@ -434,6 +482,8 @@ def showScreen():
     bot_army()
     bullet_impact()
     bot_bullets_()
+    shooter_impact()
+    text(str(life), (100,950), color)
     glutSwapBuffers()
 
 glutInit()
@@ -450,4 +500,5 @@ glutTimerFunc(1,animate,0)
 glutTimerFunc(100,animate_bot_movement,0)
 glutTimerFunc(1,bot_bullet_animation,0)
 glutTimerFunc(2000,bot_bullet_generation,0)
+glutTimerFunc(1, life_checker, 0)
 glutMainLoop()
