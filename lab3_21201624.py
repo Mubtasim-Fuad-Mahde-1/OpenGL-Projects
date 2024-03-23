@@ -223,7 +223,7 @@ def shot_checker(): # check if the shot hits
                     score+=1
                     print('Score =', score)
                     return
-            elif j[1] < 70: #else remove a life from life count 
+            elif j[1] < 50: #else remove a life from life count 
                 life-=1
                 print('Life Left =',life)
                 circles.remove(j)
@@ -231,9 +231,10 @@ def shot_checker(): # check if the shot hits
                 if life == 0:
                     print('Game Over!')
                     restart()
+                glutPostRedisplay()
                 return
-            count+=1
-            #my_list.remove(value_to_remove)
+            else:
+                count+=1
 
 def draw_text(text): # draw text on screen showing the score and life left
     glColor3f(1,1,1)

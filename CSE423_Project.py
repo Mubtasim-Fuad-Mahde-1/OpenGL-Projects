@@ -167,8 +167,14 @@ def bullet_impact():
                     bots.remove(j)
                     bots.insert(idx,bot_range(idx))
                     return
-                    
-            
+
+def bot_bullets_():
+    global bot_bullets
+    glPointSize(4)
+    color = (1,1,1)
+    for i in bot_bullets:
+        x,y = i.cord()
+        draw_circle(x,y,3,color)
 
 #Mid Point Line Drawing Algorithm
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
@@ -304,9 +310,19 @@ def draw_circle(x0, y0, r, color): #midpoint circle drawing algorithm
 
 
 class nonplayer_bullet:
-    def __init__(self):
-        pass
-    
+    def __init__(self,x,y):
+        global shooter_x
+        self.x = x
+        self.y = y
+        x2 = shooter_x
+        y2 = 100
+        self.m = (y2-y)/(x2-x)
+    def position(self):
+        self.x = self.x-((1/self.m)*3)
+        self.y = self.y -3
+        return self.x, self.y
+    def cord(self):
+        return self.x, self.y
 
 
 #User input and actions
@@ -364,7 +380,34 @@ def animate_bot_movement(value):
             bots.insert(i,bot_range(i))
         bots[i] = (bots[i][0],bots[i][1]-2)
         glutPostRedisplay()
-    glutTimerFunc(25,animate_bot_movement,0)
+    glutTimerFunc(100,animate_bot_movement,0)
+
+def bot_bullet_generation(value):
+    global bots,bot_bullets,shooter_x
+    X = shooter_x
+    Y = 100
+    r = random.randint(0,4)
+    x = bots[r][0]
+    y = bots[r][1]
+    dx = abs(X-x)
+    dy = abs(Y-y)
+    if dx>=dy:
+        pass
+    else:
+        obj = nonplayer_bullet(x,y)
+        bot_bullets.append(obj)
+    glutTimerFunc(2000,bot_bullet_generation,0)
+    
+def bot_bullet_animation(value):
+    global bot_bullets
+    for i in bot_bullets:
+        x,y = i.position()
+        if y < 60:
+            bot_bullets.remove(i)
+            del i
+            break
+    glutPostRedisplay()
+    glutTimerFunc(1,bot_bullet_animation,0)
 
 #Screen Properties and Object display
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
@@ -390,6 +433,7 @@ def showScreen():
     shooter_bullet()
     bot_army()
     bullet_impact()
+    bot_bullets_()
     glutSwapBuffers()
 
 glutInit()
@@ -403,5 +447,7 @@ glutSpecialFunc(specialKeyListener)
 glutMouseFunc(mouseListener)
 glutTimerFunc(1,animate_shooter_bullets,0)
 glutTimerFunc(1,animate,0)
-glutTimerFunc(25,animate_bot_movement,0)
+glutTimerFunc(100,animate_bot_movement,0)
+glutTimerFunc(1,bot_bullet_animation,0)
+glutTimerFunc(2000,bot_bullet_generation,0)
 glutMainLoop()
