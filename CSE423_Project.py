@@ -462,7 +462,7 @@ def iterate():
     glViewport(0, 0, 1000, 1000)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    glOrtho(0.0, 1000, 0.0, 1000, 0.0, 1.0)
+    glOrtho(0.0, 1500, 0.0, 1500, 0.0, 1.0)
     glMatrixMode (GL_MODELVIEW)
     glLoadIdentity()
 
