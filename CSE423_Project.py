@@ -51,14 +51,15 @@ def bottom_bar():
     draw_line(x+10,y-10,x+10,y-60,color)
     draw_line(x+990,y-10,x+990,y-60,color)
 
-def shooter():
-    pass
 
 def health():
     pass
 
 def pause_resume():
-    pass
+    color = (1,1,1)
+    glPointSize(5)
+    draw_line(975,10,975,100,color)
+    draw_circle(500,500,20,color)
 
 def restart():
     pass
@@ -483,6 +484,7 @@ def showScreen():
     bullet_impact()
     bot_bullets_()
     shooter_impact()
+    pause_resume()
     text(str(life), (100,950), color)
     glutSwapBuffers()
 
