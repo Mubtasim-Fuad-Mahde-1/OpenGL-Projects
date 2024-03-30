@@ -30,6 +30,9 @@ def text(text, coordinate, color):
 
 def cross():
     pass
+    
+def back():
+    pass
 
 def top_bar():
     x = 0
@@ -51,15 +54,11 @@ def bottom_bar():
     draw_line(x+10,y-10,x+10,y-60,color)
     draw_line(x+990,y-10,x+990,y-60,color)
 
-
 def health():
     pass
 
 def pause_resume():
-    color = (1,1,1)
-    glPointSize(5)
-    draw_line(975,10,975,100,color)
-    draw_circle(500,500,20,color)
+    pass
 
 def restart():
     pass
@@ -187,6 +186,9 @@ def shooter_impact():
         if x-30 < X < x+30:
             if y-30 < Y < y+30:
                 life -= 1
+                if life == 0:
+                    restart()
+                    return
                 idx = bots.index(i)
                 bots.remove(i)
                 bots.insert(idx,bot_range(idx))
@@ -197,6 +199,9 @@ def shooter_impact():
         if x-20 < X < x+20:
             if y-20 < Y < y+20:
                 life -= 1
+                if life == 0:
+                    restart()
+                    return
                 bot_bullets.remove(j)
                 del j
                 glutPostRedisplay()
@@ -368,7 +373,7 @@ def restart():
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
 
 def convert_coordinate(x, y):
-    return x, 600-y
+    return x, 1000-y
 
 def keyboardListener(key, x, y):
     global shooter_x, shooter_bullets
@@ -416,6 +421,9 @@ def animate_bot_movement(value):
     for i in range(len(bots)):
         if bots[i][1]-2 < 90:
             life -= 1
+            if life == 0:
+                    restart()
+                    return
             bots.pop(i)
             bots.insert(i,bot_range(i))
             glutPostRedisplay()
@@ -450,12 +458,6 @@ def bot_bullet_animation(value):
     glutPostRedisplay()
     glutTimerFunc(1,bot_bullet_animation,0)
 
-def life_checker(value):
-    global life
-    if life == 0:
-        restart()
-        return
-    glutTimerFunc(1, life_checker, 0)
 
 #Screen Properties and Object display
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
@@ -463,7 +465,7 @@ def iterate():
     glViewport(0, 0, 1000, 1000)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    glOrtho(0.0, 1500, 0.0, 1500, 0.0, 1.0)
+    glOrtho(0.0, 1000, 0.0, 1000, 0.0, 1.0)
     glMatrixMode (GL_MODELVIEW)
     glLoadIdentity()
 
@@ -485,6 +487,8 @@ def showScreen():
     bot_bullets_()
     shooter_impact()
     pause_resume()
+    cross()
+    back()
     text(str(life), (100,950), color)
     glutSwapBuffers()
 
@@ -502,5 +506,4 @@ glutTimerFunc(1,animate,0)
 glutTimerFunc(100,animate_bot_movement,0)
 glutTimerFunc(1,bot_bullet_animation,0)
 glutTimerFunc(2000,bot_bullet_generation,0)
-glutTimerFunc(1, life_checker, 0)
 glutMainLoop()
