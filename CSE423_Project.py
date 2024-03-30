@@ -33,7 +33,7 @@ def top_bar():
     x = 0
     y = 1000
     glPointSize(5)
-    color = (1,1,1)
+    color = (0,0,0)
     draw_line(x+10,y-10,x+990,y-10,color)
     draw_line(x+10,y-60,x+990,y-60,color)
     draw_line(x+10,y-10,x+10,y-60,color)
@@ -43,7 +43,7 @@ def bottom_bar():
     x = 0
     y = 70
     glPointSize(5)
-    color = (1,1,1)
+    color = (0,0,0)
     draw_line(x+10,y-10,x+990,y-10,color)
     draw_line(x+10,y-60,x+990,y-60,color)
     draw_line(x+10,y-10,x+10,y-60,color)
@@ -62,7 +62,7 @@ def pause_title():
 
 def pause_resume():
     #global pause
-    color = (1,1,1)
+    color = (1,1,0.1)
     glPointSize(2)
     if pause:
         draw_line(910,975,930,965,color)
@@ -74,14 +74,14 @@ def pause_resume():
         draw_line(920,975,920,955,color)
 
 def back():
-    color = (1,1,1)
+    color = (0.2,0.7,1)
     glPointSize(2)
     draw_line(850, 965, 880, 965, color)
     draw_line(850, 965, 860, 975, color)
     draw_line(850, 965, 860, 955, color)
 
 def cross():
-    color = (1,1,1)
+    color = (1,0.2,0.2)
     glPointSize(2)
     draw_line(955,955,975,975,color)
     draw_line(955,975,975,955,color)
@@ -91,7 +91,7 @@ def shooter():
     global shooter_x
     x = shooter_x
     y = 130
-    color = (1,1,1)
+    color = (0.3,0.3,0.3)
     glPointSize(3)
     draw_line(x,y,x-25,y-50,color)
     draw_line(x,y,x+25,y-50,color)
@@ -114,7 +114,7 @@ def shooter_bullet():
     for i in shooter_bullets:
         x = i[0]
         y = i[1]
-        color = (1,1,1)
+        color = (1,0.3,0.1)
         glPointSize(1)
         draw_line(x,y,x-6,y-20,color)
         draw_line(x,y,x+6,y-20,color)
@@ -123,7 +123,7 @@ def shooter_bullet():
     for i in shooter_bullets:
         x = i[0]-30
         y = i[1]-40
-        color = (1,1,1)
+        color = (1,0.5,0.1)
         glPointSize(1)
         draw_line(x,y,x-6,y-20,color)
         draw_line(x,y,x+6,y-20,color)
@@ -132,7 +132,7 @@ def shooter_bullet():
     for i in shooter_bullets:
         x = i[0]+30
         y = i[1]-40
-        color = (1,1,1)
+        color = (1,0.5,0.1)
         glPointSize(1)
         draw_line(x,y,x-6,y-20,color)
         draw_line(x,y,x+6,y-20,color)
@@ -158,7 +158,7 @@ def bot_army():
         x = i[0]
         y = i[1]
         r = 30
-        color = (1,1,1)
+        color = (0.2,0.2,1)
         glPointSize(4)
         draw_circle(x,y,r,color)
         draw_circle(x,y,10,color)
@@ -193,7 +193,7 @@ def bullet_impact():
 def bot_bullets_():
     global bot_bullets
     glPointSize(4)
-    color = (1,1,1)
+    color = (1,0.2,0.2)
     for i in bot_bullets:
         x,y = i.cord()
         draw_circle(x,y,3,color)
@@ -512,6 +512,7 @@ def showScreen():
     global life
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glPointSize(2)
+    glClearColor(1.0, 1.0, 1.0, 1.0)
     color = (1,1,1)
     if pause == True:
         iterate()
