@@ -14,6 +14,7 @@ level = 1
 bots = []
 shooter_bullets = []
 bot_bullets = []
+pause = False
 
 
 
@@ -27,9 +28,6 @@ def text(text, coordinate, color):
     glRasterPos2f(coordinate[0], coordinate[1])
     for char in text:
         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ord(char))
-
-def cross():
-    pass
 
 def top_bar():
     x = 0
@@ -55,17 +53,36 @@ def bottom_bar():
 def health():
     pass
 
-def pause_resume():
-    color = (1,1,1)
-    glPointSize(5)
-    draw_line(975,10,975,100,color)
-    draw_circle(500,500,20,color)
-
-def restart():
-    pass
-
 def pause_title():
     pass
+
+
+def pause_resume():
+    #global pause
+    color = (1,1,1)
+    glPointSize(2)
+    if pause:
+        draw_line(910,975,930,965,color)
+        draw_line(910,955,930,965,color)
+        draw_line(910,975,910,955,color)
+        draw_line(920,975,920,955,color)
+    else:
+        draw_line(910,975,910,955,color)
+        draw_line(920,975,920,955,color)
+
+def back():
+    color = (1,1,1)
+    glPointSize(2)
+    draw_line(850, 965, 880, 965, color)
+    draw_line(850, 965, 860, 975, color)
+    draw_line(850, 965, 860, 955, color)
+
+def cross():
+    color = (1,1,1)
+    glPointSize(2)
+    draw_line(955,955,975,975,color)
+    draw_line(955,975,975,955,color)
+
 
 def shooter():
     global shooter_x
@@ -353,7 +370,8 @@ class nonplayer_bullet:
         return self.x, self.y
 
 def restart():
-    global shooter_x,level,shooter_bullets,bots,bot_bullets,life
+    global shooter_x,level,shooter_bullets,bots,bot_bullets,life,pause
+    pause = True
     life = 3
     shooter_x = 500
     level = 1
@@ -388,7 +406,22 @@ def specialKeyListener(key, x, y):
             shooter_x+=10
 
 def mouseListener(button, state, x, y):
-    pass
+    global score,pause
+    if button == GLUT_LEFT_BUTTON and state == GLUT_DOWN:
+        y = 1000 - y
+        print(x,y)
+
+        if 910 <= x <= 930 and 955 <= y <= 975:  # pay_pause
+            if pause == True:
+                pause = False
+            else:
+                pause = True
+
+        elif 955 <= x <= 975 and 955 <= y <= 975:  # Cross button
+            print("Goodbye")
+            print("Final Score:", score)
+            glutLeaveMainLoop()
+
 
 
 
@@ -463,7 +496,7 @@ def iterate():
     glViewport(0, 0, 1000, 1000)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    glOrtho(0.0, 1500, 0.0, 1500, 0.0, 1.0)
+    glOrtho(0.0, 1000, 0.0, 1000, 0.0, 1.0)
     glMatrixMode (GL_MODELVIEW)
     glLoadIdentity()
 
@@ -475,18 +508,30 @@ def showScreen():
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glPointSize(2)
     color = (1,1,1)
-    iterate()
-    top_bar()
-    bottom_bar()
-    shooter()
-    shooter_bullet()
-    bot_army()
-    bullet_impact()
-    bot_bullets_()
-    shooter_impact()
-    pause_resume()
-    text(str(life), (100,950), color)
-    glutSwapBuffers()
+    if pause == True:
+        iterate()
+        top_bar()
+        bottom_bar()
+        pause_resume()
+        cross()
+        back()
+        glutSwapBuffers()
+    else:
+        
+        iterate()
+        top_bar()
+        bottom_bar()
+        shooter()
+        shooter_bullet()
+        bot_army()
+        bullet_impact()
+        bot_bullets_()
+        shooter_impact()
+        pause_resume()
+        cross()
+        back()
+        text(str(life), (100,950), color)
+        glutSwapBuffers()
 
 glutInit()
 glutInitDisplayMode(GLUT_RGBA)
