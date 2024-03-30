@@ -14,6 +14,7 @@ level = 1
 bots = []
 shooter_bullets = []
 bot_bullets = []
+pause = False
 
 
 
@@ -27,12 +28,6 @@ def text(text, coordinate, color):
     glRasterPos2f(coordinate[0], coordinate[1])
     for char in text:
         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ord(char))
-
-def cross():
-    pass
-    
-def back():
-    pass
 
 def top_bar():
     x = 0
@@ -54,17 +49,40 @@ def bottom_bar():
     draw_line(x+10,y-10,x+10,y-60,color)
     draw_line(x+990,y-10,x+990,y-60,color)
 
+
 def health():
-    pass
-
-def pause_resume():
-    pass
-
-def restart():
     pass
 
 def pause_title():
     pass
+
+
+def pause_resume():
+    #global pause
+    color = (1,1,1)
+    glPointSize(2)
+    if pause:
+        draw_line(910,975,930,965,color)
+        draw_line(910,955,930,965,color)
+        draw_line(910,975,910,955,color)
+        draw_line(920,975,920,955,color)
+    else:
+        draw_line(910,975,910,955,color)
+        draw_line(920,975,920,955,color)
+
+def back():
+    color = (1,1,1)
+    glPointSize(2)
+    draw_line(850, 965, 880, 965, color)
+    draw_line(850, 965, 860, 975, color)
+    draw_line(850, 965, 860, 955, color)
+
+def cross():
+    color = (1,1,1)
+    glPointSize(2)
+    draw_line(955,955,975,975,color)
+    draw_line(955,975,975,955,color)
+
 
 def shooter():
     global shooter_x
@@ -186,9 +204,6 @@ def shooter_impact():
         if x-30 < X < x+30:
             if y-30 < Y < y+30:
                 life -= 1
-                if life == 0:
-                    restart()
-                    return
                 idx = bots.index(i)
                 bots.remove(i)
                 bots.insert(idx,bot_range(idx))
@@ -199,9 +214,6 @@ def shooter_impact():
         if x-20 < X < x+20:
             if y-20 < Y < y+20:
                 life -= 1
-                if life == 0:
-                    restart()
-                    return
                 bot_bullets.remove(j)
                 del j
                 glutPostRedisplay()
@@ -358,7 +370,8 @@ class nonplayer_bullet:
         return self.x, self.y
 
 def restart():
-    global shooter_x,level,shooter_bullets,bots,bot_bullets,life
+    global shooter_x,level,shooter_bullets,bots,bot_bullets,life,pause
+    pause = True
     life = 3
     shooter_x = 500
     level = 1
@@ -373,7 +386,7 @@ def restart():
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
 
 def convert_coordinate(x, y):
-    return x, 1000-y
+    return x, 600-y
 
 def keyboardListener(key, x, y):
     global shooter_x, shooter_bullets
@@ -393,7 +406,22 @@ def specialKeyListener(key, x, y):
             shooter_x+=10
 
 def mouseListener(button, state, x, y):
-    pass
+    global score,pause
+    if button == GLUT_LEFT_BUTTON and state == GLUT_DOWN:
+        y = 1000 - y
+        print(x,y)
+
+        if 910 <= x <= 930 and 955 <= y <= 975:  # pay_pause
+            if pause == True:
+                pause = False
+            else:
+                pause = True
+
+        elif 955 <= x <= 975 and 955 <= y <= 975:  # Cross button
+            print("Goodbye")
+            print("Final Score:", score)
+            glutLeaveMainLoop()
+
 
 
 
@@ -421,9 +449,6 @@ def animate_bot_movement(value):
     for i in range(len(bots)):
         if bots[i][1]-2 < 90:
             life -= 1
-            if life == 0:
-                    restart()
-                    return
             bots.pop(i)
             bots.insert(i,bot_range(i))
             glutPostRedisplay()
@@ -458,6 +483,12 @@ def bot_bullet_animation(value):
     glutPostRedisplay()
     glutTimerFunc(1,bot_bullet_animation,0)
 
+def life_checker(value):
+    global life
+    if life == 0:
+        restart()
+        return
+    glutTimerFunc(1, life_checker, 0)
 
 #Screen Properties and Object display
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
@@ -477,20 +508,30 @@ def showScreen():
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glPointSize(2)
     color = (1,1,1)
-    iterate()
-    top_bar()
-    bottom_bar()
-    shooter()
-    shooter_bullet()
-    bot_army()
-    bullet_impact()
-    bot_bullets_()
-    shooter_impact()
-    pause_resume()
-    cross()
-    back()
-    text(str(life), (100,950), color)
-    glutSwapBuffers()
+    if pause == True:
+        iterate()
+        top_bar()
+        bottom_bar()
+        pause_resume()
+        cross()
+        back()
+        glutSwapBuffers()
+    else:
+        
+        iterate()
+        top_bar()
+        bottom_bar()
+        shooter()
+        shooter_bullet()
+        bot_army()
+        bullet_impact()
+        bot_bullets_()
+        shooter_impact()
+        pause_resume()
+        cross()
+        back()
+        text(str(life), (100,950), color)
+        glutSwapBuffers()
 
 glutInit()
 glutInitDisplayMode(GLUT_RGBA)
@@ -506,4 +547,5 @@ glutTimerFunc(1,animate,0)
 glutTimerFunc(100,animate_bot_movement,0)
 glutTimerFunc(1,bot_bullet_animation,0)
 glutTimerFunc(2000,bot_bullet_generation,0)
+glutTimerFunc(1, life_checker, 0)
 glutMainLoop()
