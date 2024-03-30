@@ -54,7 +54,10 @@ def health():
     pass
 
 def pause_title():
-    pass
+    if pause == True:
+        color = (1,1,1)
+        text("GAMR PAUSE", (500,500), color)
+
 
 
 def pause_resume():
@@ -422,7 +425,9 @@ def mouseListener(button, state, x, y):
             print("Final Score:", score)
             glutLeaveMainLoop()
 
-
+        elif 850 <= x <= 880 and 955 <= y <= 975:
+            print("Starting Over")
+            restart()
 
 
 #Animation Functions
@@ -496,7 +501,7 @@ def iterate():
     glViewport(0, 0, 1000, 1000)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    glOrtho(0.0, 1500, 0.0, 1500, 0.0, 1.0)
+    glOrtho(0.0, 1000, 0.0, 1000, 0.0, 1.0)
     glMatrixMode (GL_MODELVIEW)
     glLoadIdentity()
 
@@ -515,6 +520,7 @@ def showScreen():
         pause_resume()
         cross()
         back()
+        pause_title()
         glutSwapBuffers()
     else:
         
