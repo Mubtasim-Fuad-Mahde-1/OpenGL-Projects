@@ -55,17 +55,12 @@ def health():
 
 def pause_title():
     if pause == True:
-<<<<<<< HEAD
-        color = (0,1,1)
+        color = (1,1,0)
         text("GAME PAUSE", (450,500), color)
         draw_line(400,450,400,570,color)
         draw_line(620,450,620,570,color)
         draw_line(400,570,620,570,color)
         draw_line(400,450,620,450,color)
-=======
-        color = (1,1,0.2)
-        text("GAMR PAUSE", (500,500), color)
->>>>>>> 0f510d1b6d4b400431762b674de4d926dbab477a
 
 
 
