@@ -33,7 +33,7 @@ def top_bar():
     x = 0
     y = 1000
     glPointSize(5)
-    color = (0,0,0)
+    color = (1,1,1)
     draw_line(x+10,y-10,x+990,y-10,color)
     draw_line(x+10,y-60,x+990,y-60,color)
     draw_line(x+10,y-10,x+10,y-60,color)
@@ -43,7 +43,7 @@ def bottom_bar():
     x = 0
     y = 70
     glPointSize(5)
-    color = (0,0,0)
+    color = (1,1,1)
     draw_line(x+10,y-10,x+990,y-10,color)
     draw_line(x+10,y-60,x+990,y-60,color)
     draw_line(x+10,y-10,x+10,y-60,color)
@@ -55,12 +55,17 @@ def health():
 
 def pause_title():
     if pause == True:
+<<<<<<< HEAD
         color = (0,1,1)
         text("GAME PAUSE", (450,500), color)
         draw_line(400,450,400,570,color)
         draw_line(620,450,620,570,color)
         draw_line(400,570,620,570,color)
         draw_line(400,450,620,450,color)
+=======
+        color = (1,1,0.2)
+        text("GAMR PAUSE", (500,500), color)
+>>>>>>> 0f510d1b6d4b400431762b674de4d926dbab477a
 
 
 
@@ -161,7 +166,7 @@ def bot_army():
         x = i[0]
         y = i[1]
         r = 30
-        color = (0.2,0.2,1)
+        color = (0.1,0.2,0.5)
         glPointSize(4)
         draw_circle(x,y,r,color)
         draw_circle(x,y,10,color)
@@ -196,7 +201,7 @@ def bullet_impact():
 def bot_bullets_():
     global bot_bullets
     glPointSize(4)
-    color = (1,0.2,0.2)
+    color = (1,0.1,0.1)
     for i in bot_bullets:
         x,y = i.cord()
         draw_circle(x,y,3,color)
@@ -515,7 +520,7 @@ def showScreen():
     global life
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glPointSize(2)
-    glClearColor(1.0, 1.0, 1.0, 1.0)
+    glClearColor(0.0, 0.0, 0.0, 1.0)
     color = (1,1,1)
     if pause == True:
         iterate()
