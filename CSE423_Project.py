@@ -33,7 +33,7 @@ def top_bar():
     x = 0
     y = 1000
     glPointSize(5)
-    color = (1,1,1)
+    color = (0.4,0.4,0.5)
     draw_line(x+10,y-10,x+990,y-10,color)
     draw_line(x+10,y-60,x+990,y-60,color)
     draw_line(x+10,y-10,x+10,y-60,color)
@@ -43,7 +43,7 @@ def bottom_bar():
     x = 0
     y = 70
     glPointSize(5)
-    color = (1,1,1)
+    color = (0.4,0.4,0.5)
     draw_line(x+10,y-10,x+990,y-10,color)
     draw_line(x+10,y-60,x+990,y-60,color)
     draw_line(x+10,y-10,x+10,y-60,color)
@@ -161,7 +161,7 @@ def bot_army():
         x = i[0]
         y = i[1]
         r = 30
-        color = (0.1,0.2,0.5)
+        color = (0.7,0.2,0.1)
         glPointSize(4)
         draw_circle(x,y,r,color)
         draw_circle(x,y,10,color)
@@ -196,7 +196,7 @@ def bullet_impact():
 def bot_bullets_():
     global bot_bullets
     glPointSize(4)
-    color = (1,0.1,0.1)
+    color = (1,0.4,0.2)
     for i in bot_bullets:
         x,y = i.cord()
         draw_circle(x,y,3,color)
@@ -504,7 +504,7 @@ def iterate():
     glViewport(0, 0, 1000, 1000)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    glOrtho(0.0, 1000, 0.0, 1000, 0.0, 1.0)
+    glOrtho(0.0, 1500, 0.0, 1500, 0.0, 1.0)
     glMatrixMode (GL_MODELVIEW)
     glLoadIdentity()
 
@@ -515,7 +515,7 @@ def showScreen():
     global life
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glPointSize(2)
-    glClearColor(0.0, 0.0, 0.0, 1.0)
+    glClearColor(0.2,0.2,0.3, 1.0)
     color = (1,1,1)
     if pause == True:
         iterate()
