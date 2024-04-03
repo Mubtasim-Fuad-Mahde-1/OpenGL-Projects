@@ -94,23 +94,24 @@ def shooter():
     global shooter_x
     x = shooter_x
     y = 130
-    color = (0.3,0.3,0.3)
+    color = (0.2,0.6,0.8)
+    color1 = (0.1,0.5,1)
     glPointSize(3)
     draw_line(x,y,x-25,y-50,color)
     draw_line(x,y,x+25,y-50,color)
     draw_line(x-25,y-50,x+25,y-50,color)
-    draw_line(x-13,y-25,x-50,y-60,color)
-    draw_line(x+13,y-25,x+50,y-60,color)
-    draw_line(x-50,y-60,x-25,y-50,color)
-    draw_line(x+50,y-60,x+25,y-50,color)
+    draw_line(x-13,y-25,x-50,y-60,color1)
+    draw_line(x+13,y-25,x+50,y-60,color1)
+    draw_line(x-50,y-60,x-25,y-50,color1)
+    draw_line(x+50,y-60,x+25,y-50,color1)
     glPointSize(2)
-    draw_line(x,y+10,x-10,y-5,color)
-    draw_line(x,y+10,x+10,y-5,color)
-    draw_line(x-10,y-5,x,y,color)
-    draw_line(x+10,y-5,x,y,color)
+    draw_line(x,y+10,x-10,y-5,color1)
+    draw_line(x,y+10,x+10,y-5,color1)
+    draw_line(x-10,y-5,x,y,color1)
+    draw_line(x+10,y-5,x,y,color1)
     glPointSize(4)
-    draw_line(x-30,y-40,x-30,y-30,color)
-    draw_line(x+30,y-40,x+30,y-30,color)
+    draw_line(x-30,y-40,x-30,y-30,color1)
+    draw_line(x+30,y-40,x+30,y-30,color1)
 
 def shooter_bullet():
     global shooter_bullets
