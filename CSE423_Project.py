@@ -55,7 +55,7 @@ def health():
 
 def pause_title():
     if pause == True:
-        color = (1,1,0)
+        color = (0.75,0.75,0)
         text("GAME PAUSE", (450,500), color)
         draw_line(400,450,400,570,color)
         draw_line(620,450,620,570,color)
@@ -66,7 +66,7 @@ def pause_title():
 
 def pause_resume():
     #global pause
-    color = (1,1,0.1)
+    color = (0.75,0.75,0)
     glPointSize(2)
     if pause:
         draw_line(910,975,930,965,color)
@@ -94,16 +94,16 @@ def shooter():
     global shooter_x
     x = shooter_x
     y = 130
-    color = (0.2,0.6,0.8)
+    color = (0.4,0.2,1)
     color1 = (0.1,0.5,1)
     glPointSize(3)
     draw_line(x,y,x-25,y-50,color)
     draw_line(x,y,x+25,y-50,color)
     draw_line(x-25,y-50,x+25,y-50,color)
-    draw_line(x-13,y-25,x-50,y-60,color1)
-    draw_line(x+13,y-25,x+50,y-60,color1)
-    draw_line(x-50,y-60,x-25,y-50,color1)
-    draw_line(x+50,y-60,x+25,y-50,color1)
+    draw_line(x-13,y-25,x-50,y-60,color)
+    draw_line(x+13,y-25,x+50,y-60,color)
+    draw_line(x-50,y-60,x-25,y-50,color)
+    draw_line(x+50,y-60,x+25,y-50,color)
     glPointSize(2)
     draw_line(x,y+10,x-10,y-5,color1)
     draw_line(x,y+10,x+10,y-5,color1)
@@ -505,7 +505,7 @@ def iterate():
     glViewport(0, 0, 1000, 1000)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    glOrtho(0.0, 1500, 0.0, 1500, 0.0, 1.0)
+    glOrtho(0.0, 1000, 0.0, 1000, 0.0, 1.0)
     glMatrixMode (GL_MODELVIEW)
     glLoadIdentity()
 
