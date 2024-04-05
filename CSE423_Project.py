@@ -7,7 +7,10 @@ import random
 
 #Global Variables
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
-global shooter_x,level,shooter_bullets,bots,bot_bullets,life
+global shooter_x,level,shooter_bullets,bots,bot_bullets,life,health_cord,power_cord,power_i
+power_i = 10
+power_cord = []
+health_cord = []
 life = 3
 shooter_x = 500
 level = 1
@@ -33,7 +36,7 @@ def top_bar():
     x = 0
     y = 1000
     glPointSize(5)
-    color = (0.4,0.4,0.5)
+    color = (1, 0, 1)
     draw_line(x+10,y-10,x+990,y-10,color)
     draw_line(x+10,y-60,x+990,y-60,color)
     draw_line(x+10,y-10,x+10,y-60,color)
@@ -43,15 +46,31 @@ def bottom_bar():
     x = 0
     y = 70
     glPointSize(5)
-    color = (0.4,0.4,0.5)
+    color = (1, 0, 1)
     draw_line(x+10,y-10,x+990,y-10,color)
     draw_line(x+10,y-60,x+990,y-60,color)
     draw_line(x+10,y-10,x+10,y-60,color)
     draw_line(x+990,y-10,x+990,y-60,color)
 
-
 def health():
-    pass
+    global health_cord
+    glPointSize(3)
+    color = (0,1,0)
+    for i in health_cord:
+        x = i[0]
+        y = i[1]
+        draw_line(x-15,y-5,x-5,y-5,color)
+        draw_line(x-15,y-5,x-15,y+5,color)
+        draw_line(x-15,y+5,x-5,y+5,color)
+        draw_line(x-5,y+5,x-5,y+15,color)
+        draw_line(x-5,y+15,x+5,y+15,color)
+        draw_line(x+5,y+15,x+5,y+5,color)
+        draw_line(x+5,y+5,x+15,y+5,color)
+        draw_line(x+15,y+5,x+15,y-5,color)
+        draw_line(x+5,y-5,x+15,y-5,color)
+        draw_line(x+5,y-5,x+5,y-15,color)
+        draw_line(x-5,y-15,x+5,y-15,color)
+        draw_line(x-5,y-5,x-5,y-15,color)
 
 def pause_title():
     if pause == True:
@@ -62,12 +81,10 @@ def pause_title():
         draw_line(400,570,620,570,color)
         draw_line(400,450,620,450,color)
 
-
-
 def pause_resume():
     #global pause
     color = (0.75,0.75,0)
-    glPointSize(2)
+    glPointSize(3)
     if pause:
         draw_line(910,975,930,965,color)
         draw_line(910,955,930,965,color)
@@ -78,17 +95,16 @@ def pause_resume():
 
 def back():
     color = (0.2,0.7,1)
-    glPointSize(2)
+    glPointSize(3)
     draw_line(850, 965, 880, 965, color)
     draw_line(850, 965, 860, 975, color)
     draw_line(850, 965, 860, 955, color)
 
 def cross():
     color = (1,0.2,0.2)
-    glPointSize(2)
+    glPointSize(3)
     draw_line(955,955,975,975,color)
     draw_line(955,975,975,955,color)
-
 
 def shooter():
     global shooter_x
@@ -144,7 +160,20 @@ def shooter_bullet():
         draw_line(x+6,y-20,x,y-12,color)
         
 def power_up():
-    pass
+    global power_cord
+    glPointSize(3)
+    color = (0,1,1)
+    for i in power_cord:
+        x = i[0]
+        y = i[1]
+        draw_line(x-12,y-5,x,y,color)
+        draw_line(x,y,x+12,y-5,color)
+        y -= 7
+        draw_line(x-12,y-5,x,y,color)
+        draw_line(x,y,x+12,y-5,color)
+        y -= 7
+        draw_line(x-12,y-5,x,y,color)
+        draw_line(x,y,x+12,y-5,color)
     
 def bot_range(i):
     i = 200*(i+1)
@@ -162,10 +191,11 @@ def bot_army():
         x = i[0]
         y = i[1]
         r = 30
-        color = (0.7,0.2,0.1)
+        color = (0.7, 0.2, 0.0)
         glPointSize(4)
         draw_circle(x,y,r,color)
         draw_circle(x,y,10,color)
+        color = (1,0,0)
         draw_line(x-7,y+7,x,y+30,color)
         draw_line(x-7,y+7,x-30,y,color)
         draw_line(x+7,y+7,x,y+30,color)
@@ -176,7 +206,7 @@ def bot_army():
         draw_line(x+7,y-7,x,y-30,color)
         
 def bullet_impact():
-    global bots, shooter_bullets
+    global bots, shooter_bullets,health_cord,power_cord
     for i in shooter_bullets:
         x = i[0]
         y = i[1]
@@ -192,18 +222,26 @@ def bullet_impact():
                     idx = bots.index(j)
                     bots.remove(j)
                     bots.insert(idx,bot_range(idx))
+                    r = random.random()
+                    c = random.random()
+                    if r <= 0.15:
+                        health_cord.append((x,y))
+                        return
+                    if c <= 0.1:
+                        power_cord.append((x,y))
+                        return
                     return
 
 def bot_bullets_():
     global bot_bullets
     glPointSize(4)
-    color = (1,0.4,0.2)
+    color = (1,0,0)
     for i in bot_bullets:
         x,y = i.cord()
         draw_circle(x,y,3,color)
 
 def shooter_impact():
-    global bots,bot_bullets,shooter_x,life
+    global bots,bot_bullets,shooter_x,life,power_i
     X = shooter_x
     Y = 130
     for i in bots:
@@ -225,8 +263,29 @@ def shooter_impact():
                 del j
                 glutPostRedisplay()
                 break
+    for k in health_cord:
+        x,y = k[0],k[1]
+        if x-20 < X < x+20:
+            if y-20 < Y < y+20:
+                life += 1
+                if life > 5:
+                    life -= 1
+                health_cord.remove(k)
+                del k
+                glutPostRedisplay()
+                break
+    for l in power_cord:
+        x,y = l[0],l[1]
+        if x-20 < X < x+20:
+            if y-20 < Y < y+20:
+                power_i += 10
+                if power_i > 40:
+                    power_i -= 10
+                power_cord.remove(l)
+                del l
+                glutPostRedisplay()
+                break
     return
-
 
 #Mid Point Line Drawing Algorithm
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
@@ -320,9 +379,6 @@ def draw_line(x1, y1, x2, y2, color):
     glEnd()
 
 
-
-
-
 #Mid Point Circle Drawing Algorithm
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
 
@@ -356,10 +412,8 @@ def draw_circle(x0, y0, r, color): #midpoint circle drawing algorithm
             d = d + 2*x + 3
             x += 1
 
-
 #Complex functions (dont touch these please!)
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
-
 
 class nonplayer_bullet:
     def __init__(self,x,y):
@@ -377,7 +431,10 @@ class nonplayer_bullet:
         return self.x, self.y
 
 def restart():
-    global shooter_x,level,shooter_bullets,bots,bot_bullets,life,pause
+    global shooter_x,level,shooter_bullets,bots,bot_bullets,life,pause,health_cord,power_cord,power_i
+    power_i = 10
+    power_cord = []
+    health_cord = []
     pause = True
     life = 3
     shooter_x = 500
@@ -402,37 +459,32 @@ def keyboardListener(key, x, y):
     glutPostRedisplay()
 
 def specialKeyListener(key, x, y):
-    global shooter_x
+    global shooter_x,power_i
     if key == GLUT_KEY_RIGHT:
-        shooter_x+=10
+        shooter_x+=power_i
         if shooter_x > 1000:
-            shooter_x-=10
+            shooter_x-=power_i
     elif key == GLUT_KEY_LEFT:
-        shooter_x-=10
+        shooter_x-=power_i
         if shooter_x < 0:
-            shooter_x+=10
+            shooter_x+=power_i
 
 def mouseListener(button, state, x, y):
     global score,pause
     if button == GLUT_LEFT_BUTTON and state == GLUT_DOWN:
         y = 1000 - y
-        print(x,y)
-
         if 910 <= x <= 930 and 955 <= y <= 975:  # pay_pause
             if pause == True:
                 pause = False
             else:
                 pause = True
-
         elif 955 <= x <= 975 and 955 <= y <= 975:  # Cross button
             print("Goodbye")
             print("Final Score:", score)
             glutLeaveMainLoop()
-
         elif 850 <= x <= 880 and 955 <= y <= 975:
             print("Starting Over")
             restart()
-
 
 #Animation Functions
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
@@ -442,14 +494,14 @@ def animate(value):
     glutTimerFunc(1,animate,0)
 
 def animate_shooter_bullets(value):
-    global shooter_bullets
+    global shooter_bullets,power_i
     for i in range(0,len(shooter_bullets)):
         if shooter_bullets[i][1]+5 > 940:
             shooter_bullets.pop(i)
             glutPostRedisplay()
             break
         else:
-            shooter_bullets[i] = (shooter_bullets[i][0],shooter_bullets[i][1]+5)
+            shooter_bullets[i] = (shooter_bullets[i][0],shooter_bullets[i][1]+power_i/2)
             glutPostRedisplay()
     glutTimerFunc(1,animate_shooter_bullets,0)
 
@@ -499,6 +551,32 @@ def life_checker(value):
         return
     glutTimerFunc(1, life_checker, 0)
 
+def animate_health(value):
+    global health_cord
+    for i in range(len(health_cord)):
+        x,y = health_cord[i][0],health_cord[i][1]
+        if y < 90:
+            health_cord.pop(i)
+            glutPostRedisplay()
+            break
+        else:
+            health_cord[i] = (x,y-3)
+            glutPostRedisplay()
+    glutTimerFunc(100,animate_health,0)
+        
+def animate_power_up(value):
+    global power_cord
+    for i in range(len(power_cord)):
+        x,y = power_cord[i][0],power_cord[i][1]
+        if y < 90:
+            power_cord.pop(i)
+            glutPostRedisplay()
+            break
+        else:
+            power_cord[i] = (x,y-3)
+            glutPostRedisplay()
+    glutTimerFunc(100,animate_power_up,0)
+
 #Screen Properties and Object display
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
 def iterate():
@@ -516,7 +594,7 @@ def showScreen():
     global life
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glPointSize(2)
-    glClearColor(0.2,0.2,0.3, 1.0)
+    glClearColor(0,0,0, 1.0)
     color = (1,1,1)
     if pause == True:
         iterate()
@@ -528,7 +606,6 @@ def showScreen():
         pause_title()
         glutSwapBuffers()
     else:
-        
         iterate()
         top_bar()
         bottom_bar()
@@ -541,6 +618,8 @@ def showScreen():
         pause_resume()
         cross()
         back()
+        health()
+        power_up()
         text(str(life), (100,950), color)
         glutSwapBuffers()
 
@@ -559,4 +638,6 @@ glutTimerFunc(100,animate_bot_movement,0)
 glutTimerFunc(1,bot_bullet_animation,0)
 glutTimerFunc(2000,bot_bullet_generation,0)
 glutTimerFunc(1, life_checker, 0)
+glutTimerFunc(100,animate_health,0)
+glutTimerFunc(100,animate_power_up,0)
 glutMainLoop()
