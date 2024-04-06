@@ -18,6 +18,7 @@ bots = []
 shooter_bullets = []
 bot_bullets = []
 pause = False
+score = 0
 
 
 
@@ -47,10 +48,14 @@ def bottom_bar():
     y = 70
     glPointSize(5)
     color = (1, 0, 1)
+    color1 = (0,1,0)
+    color2 = (0,1,1)
     draw_line(x+10,y-10,x+990,y-10,color)
     draw_line(x+10,y-60,x+990,y-60,color)
     draw_line(x+10,y-10,x+10,y-60,color)
     draw_line(x+990,y-10,x+990,y-60,color)
+    text("* HEALTH GIVES YOU EXTRA LIFE", (20,40), color1)
+    text("* POWER UP GIVES YOU EXTRA SPEED", (20,20), color2)
 
 def health():
     global health_cord
@@ -206,7 +211,7 @@ def bot_army():
         draw_line(x+7,y-7,x,y-30,color)
         
 def bullet_impact():
-    global bots, shooter_bullets,health_cord,power_cord
+    global bots, shooter_bullets,health_cord,power_cord,score
     for i in shooter_bullets:
         x = i[0]
         y = i[1]
@@ -218,6 +223,8 @@ def bullet_impact():
             Y_max = j[1]+60
             if X_min <= x <= X_max: # if it hits destory the bubble and generate a new one
                 if Y_min <= y <= Y_max:
+                    score += 1
+                    print(score)
                     shooter_bullets.remove(i)
                     idx = bots.index(j)
                     bots.remove(j)
@@ -431,12 +438,13 @@ class nonplayer_bullet:
         return self.x, self.y
 
 def restart():
-    global shooter_x,level,shooter_bullets,bots,bot_bullets,life,pause,health_cord,power_cord,power_i
+    global shooter_x,level,shooter_bullets,bots,bot_bullets,life,pause,health_cord,power_cord,power_i,score
     power_i = 10
     power_cord = []
     health_cord = []
     pause = True
     life = 3
+    score = 0
     shooter_x = 500
     level = 1
     bots = []
@@ -470,7 +478,7 @@ def specialKeyListener(key, x, y):
             shooter_x+=power_i
 
 def mouseListener(button, state, x, y):
-    global score,pause
+    global score,pause,life
     if button == GLUT_LEFT_BUTTON and state == GLUT_DOWN:
         y = 1000 - y
         if 910 <= x <= 930 and 955 <= y <= 975:  # pay_pause
@@ -596,6 +604,7 @@ def showScreen():
     glPointSize(2)
     glClearColor(0,0,0, 1.0)
     color = (1,1,1)
+    color1 = (0,1,0)
     if pause == True:
         iterate()
         top_bar()
@@ -620,14 +629,15 @@ def showScreen():
         back()
         health()
         power_up()
-        text(str(life), (100,950), color)
+        text("LIFE REMAINING: "+str(life), (20,960), color)
+        text("SCORE: "+str(score), (450,960), color1)
         glutSwapBuffers()
 
 glutInit()
 glutInitDisplayMode(GLUT_RGBA)
 glutInitWindowSize(1000, 1000) #window size
 glutInitWindowPosition(0, 0)
-wind = glutCreateWindow(b"OpenGL Coding Practice") #window name
+wind = glutCreateWindow(b"Project: Space shooter") #window name
 glutDisplayFunc(showScreen)
 glutKeyboardFunc(keyboardListener)
 glutSpecialFunc(specialKeyListener)
