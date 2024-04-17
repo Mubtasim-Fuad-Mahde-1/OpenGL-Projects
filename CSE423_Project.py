@@ -24,7 +24,7 @@ score = 0
 
 #Display Objects on screen
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
-def text(text, coordinate, color):
+def text(text, coordinate, color): #Naveya
     r = color[0]
     g = color[1]
     b = color[2]
@@ -33,7 +33,7 @@ def text(text, coordinate, color):
     for char in text:
         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ord(char))
 
-def top_bar():
+def top_bar(): #Ramisa
     x = 0
     y = 1000
     glPointSize(5)
@@ -43,7 +43,7 @@ def top_bar():
     draw_line(x+10,y-10,x+10,y-60,color)
     draw_line(x+990,y-10,x+990,y-60,color)
 
-def bottom_bar():
+def bottom_bar(): #Ramisa
     x = 0
     y = 70
     glPointSize(5)
@@ -57,7 +57,7 @@ def bottom_bar():
     text("* HEALTH GIVES YOU EXTRA LIFE", (20,40), color1)
     text("* POWER UP GIVES YOU EXTRA SPEED", (20,20), color2)
 
-def health():
+def health(): #Mahde
     global health_cord
     glPointSize(3)
     color = (0,1,0)
@@ -77,7 +77,7 @@ def health():
         draw_line(x-5,y-15,x+5,y-15,color)
         draw_line(x-5,y-5,x-5,y-15,color)
 
-def pause_title():
+def pause_title(): #Naveya
     if pause == True:
         color = (0.75,0.75,0)
         text("GAME PAUSE", (450,500), color)
@@ -86,7 +86,7 @@ def pause_title():
         draw_line(400,570,620,570,color)
         draw_line(400,450,620,450,color)
 
-def pause_resume():
+def pause_resume(): #Naveya
     #global pause
     color = (0.75,0.75,0)
     glPointSize(3)
@@ -98,20 +98,20 @@ def pause_resume():
         draw_line(910,975,910,955,color)
         draw_line(920,975,920,955,color)
 
-def back():
+def back(): #Naveya
     color = (0.2,0.7,1)
     glPointSize(3)
     draw_line(850, 965, 880, 965, color)
     draw_line(850, 965, 860, 975, color)
     draw_line(850, 965, 860, 955, color)
 
-def cross():
+def cross(): #Naveya
     color = (1,0.2,0.2)
     glPointSize(3)
     draw_line(955,955,975,975,color)
     draw_line(955,975,975,955,color)
 
-def shooter():
+def shooter(): #Ramisa
     global shooter_x
     x = shooter_x
     y = 130
@@ -134,7 +134,7 @@ def shooter():
     draw_line(x-30,y-40,x-30,y-30,color1)
     draw_line(x+30,y-40,x+30,y-30,color1)
 
-def shooter_bullet():
+def shooter_bullet(): #Mahde
     global shooter_bullets
     for i in shooter_bullets:
         x = i[0]
@@ -164,7 +164,7 @@ def shooter_bullet():
         draw_line(x-6,y-20,x,y-12,color)
         draw_line(x+6,y-20,x,y-12,color)
         
-def power_up():
+def power_up(): #Mahde
     global power_cord
     glPointSize(3)
     color = (0,1,1)
@@ -180,7 +180,7 @@ def power_up():
         draw_line(x-12,y-5,x,y,color)
         draw_line(x,y,x+12,y-5,color)
     
-def bot_range(i):
+def bot_range(i): #Mahde
     i = 200*(i+1)
     x1 = i-170
     x2 = i-30
@@ -190,7 +190,7 @@ def bot_range(i):
     y = random.randint(y1,y2)
     return (x,y)
 
-def bot_army():
+def bot_army(): #Ramisa
     global bots
     for i in bots:
         x = i[0]
@@ -210,7 +210,7 @@ def bot_army():
         draw_line(x+7,y-7,x+30,y,color)
         draw_line(x+7,y-7,x,y-30,color)
         
-def bullet_impact():
+def bullet_impact(): #Mahde
     global bots, shooter_bullets,health_cord,power_cord,score
     for i in shooter_bullets:
         x = i[0]
@@ -239,7 +239,7 @@ def bullet_impact():
                         return
                     return
 
-def bot_bullets_():
+def bot_bullets_(): #Ramisa
     global bot_bullets
     glPointSize(4)
     color = (1,0,0)
@@ -247,7 +247,7 @@ def bot_bullets_():
         x,y = i.cord()
         draw_circle(x,y,3,color)
 
-def shooter_impact():
+def shooter_impact(): #mahde
     global bots,bot_bullets,shooter_x,life,power_i
     X = shooter_x
     Y = 130
@@ -296,7 +296,7 @@ def shooter_impact():
 
 #Mid Point Line Drawing Algorithm
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
-
+#Naveya
 def zone(x1, y1, x2, y2): 
     dy = y2-y1
     dx = x2-x1
@@ -388,7 +388,7 @@ def draw_line(x1, y1, x2, y2, color):
 
 #Mid Point Circle Drawing Algorithm
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
-
+#Ramisa 
 def circle_zones(x, y, x0, y0, color): #x,y are points generated for each zone and x0,y0 is the origin of circle
     r = color[0]
     g = color[1]
@@ -421,8 +421,7 @@ def draw_circle(x0, y0, r, color): #midpoint circle drawing algorithm
 
 #Complex functions (dont touch these please!)
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
-
-class nonplayer_bullet:
+class nonplayer_bullet: #Mahde
     def __init__(self,x,y):
         global shooter_x
         self.x = x
@@ -437,7 +436,7 @@ class nonplayer_bullet:
     def cord(self):
         return self.x, self.y
 
-def restart():
+def restart(): #Naveya
     global shooter_x,level,shooter_bullets,bots,bot_bullets,life,pause,health_cord,power_cord,power_i,score
     power_i = 10
     power_cord = []
@@ -457,16 +456,13 @@ def restart():
 #User input and actions
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
 
-def convert_coordinate(x, y):
-    return x, 600-y
-
-def keyboardListener(key, x, y):
+def keyboardListener(key, x, y): #Mahde
     global shooter_x, shooter_bullets
     if key == b' ':
         shooter_bullets.append((shooter_x,160))
     glutPostRedisplay()
 
-def specialKeyListener(key, x, y):
+def specialKeyListener(key, x, y): #Mahde
     global shooter_x,power_i
     if key == GLUT_KEY_RIGHT:
         shooter_x+=power_i
@@ -477,7 +473,7 @@ def specialKeyListener(key, x, y):
         if shooter_x < 0:
             shooter_x+=power_i
 
-def mouseListener(button, state, x, y):
+def mouseListener(button, state, x, y):#Naveya
     global score,pause,life
     if button == GLUT_LEFT_BUTTON and state == GLUT_DOWN:
         y = 1000 - y
@@ -497,11 +493,11 @@ def mouseListener(button, state, x, y):
 #Animation Functions
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
 
-def animate(value):
+def animate(value): #Naveya
     glutPostRedisplay()
     glutTimerFunc(1,animate,0)
 
-def animate_shooter_bullets(value):
+def animate_shooter_bullets(value): #Mahde
     global shooter_bullets,power_i
     for i in range(0,len(shooter_bullets)):
         if shooter_bullets[i][1]+5 > 940:
@@ -513,7 +509,7 @@ def animate_shooter_bullets(value):
             glutPostRedisplay()
     glutTimerFunc(1,animate_shooter_bullets,0)
 
-def animate_bot_movement(value):
+def animate_bot_movement(value): #Mahde
     global bots,life
     for i in range(len(bots)):
         if bots[i][1]-2 < 90:
@@ -525,7 +521,7 @@ def animate_bot_movement(value):
         glutPostRedisplay()
     glutTimerFunc(100,animate_bot_movement,0)
 
-def bot_bullet_generation(value):
+def bot_bullet_generation(value): #Mahde
     global bots,bot_bullets,shooter_x
     X = shooter_x
     Y = 100
@@ -541,7 +537,7 @@ def bot_bullet_generation(value):
         bot_bullets.append(obj)
     glutTimerFunc(2000,bot_bullet_generation,0)
     
-def bot_bullet_animation(value):
+def bot_bullet_animation(value): #Mahde
     global bot_bullets
     for i in bot_bullets:
         x,y = i.position()
@@ -552,14 +548,14 @@ def bot_bullet_animation(value):
     glutPostRedisplay()
     glutTimerFunc(1,bot_bullet_animation,0)
 
-def life_checker(value):
+def life_checker(value): #Ramisa
     global life
     if life == 0:
         restart()
         return
     glutTimerFunc(1, life_checker, 0)
 
-def animate_health(value):
+def animate_health(value): #Mahde
     global health_cord
     for i in range(len(health_cord)):
         x,y = health_cord[i][0],health_cord[i][1]
@@ -572,7 +568,7 @@ def animate_health(value):
             glutPostRedisplay()
     glutTimerFunc(100,animate_health,0)
         
-def animate_power_up(value):
+def animate_power_up(value): #Mahde
     global power_cord
     for i in range(len(power_cord)):
         x,y = power_cord[i][0],power_cord[i][1]
@@ -587,7 +583,7 @@ def animate_power_up(value):
 
 #Screen Properties and Object display
 #----------------------------------------------------------------------------##----------------------------------------------------------------------------#
-def iterate():
+def iterate(): #Naveya
     glViewport(0, 0, 1000, 1000)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
@@ -595,10 +591,10 @@ def iterate():
     glMatrixMode (GL_MODELVIEW)
     glLoadIdentity()
 
-for i in range(5):
+for i in range(5): #Mahde
     bots.append(bot_range(i))
 
-def showScreen():
+def showScreen(): #All
     global life
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glPointSize(2)
